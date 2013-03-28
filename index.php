@@ -10,7 +10,7 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        echo "Hello world!";
+        echo "Hello Diede!";
         ?>
     </body>
 </html>
