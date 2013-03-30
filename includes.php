@@ -2,6 +2,7 @@
 require_once 'classes/Config.php';
 require_once 'classes/Database.php';
 require_once 'classes/Login.php';
+require_once 'classes/Member.php';
 
 
 $config = new Config();

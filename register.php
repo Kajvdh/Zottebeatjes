@@ -16,31 +16,13 @@ if ($login->getSession()) {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Registreren</title>
-        <script src="js/jquery/jquery-1.9.1.js" />
-        <script>
-            cscsct();
-//            var request;
-//            $("#username").focusout(function(event) {
-//                if (request) {
-//                    request.abort();
-//                }
-//                var data = $(this).val();
-//                var request = $.ajax({
-//                    url: "ajax/registerValidate",
-//                    type: "post",
-//                    data: "{username"
-//                })
-//            });
-            
-            
-            $("#clickhere").click(function() {
-                alfert("geklikt!");
-            });
-        </script>
-        
-        
+        <script src="js/jquery/jquery-1.9.1.js"></script>
     </head>
     <body>
+        <?php
+        if (!isset($_POST['regform'])) {
+        ?>
+        
         <form name="register" method="post" action="register.php" >
             <fieldset>
                 <legend>Registreren</legend>
@@ -69,8 +51,77 @@ if ($login->getSession()) {
                 ?>
                 
             </fieldset>
-            <input id="submitbutton" type="button" value="Registreer!" />
+            <input id="submitbutton" type="submit" value="Registreer!" />
         </form>
+        <?php
+        }
+        else {
+            //Controle velden
+            /**
+             * @todo: Controle van de velden verbeteren
+             * + Asynchrone controle via AJAX bij het invullen van het form.
+             */
+            $errors = "0";
+            $errormsg = "";
+            
+            if ((!isset($_POST["username"]) || strlen($_POST["username"] < "3"))) {
+                $errors++;
+                $errormsg .= "Je hebt geen geldige gebruikersnaam opgegeven.<br />";
+            }
+            if ((!isset($_POST["password1"]) || (!isset($_POST["password2"]) || strlen($_POST["password1"] < "8")))) {
+                $errors++;
+                $errormsg .= "Je hebt geen geldig wachtwoord opgegeven.<br />";
+            }
+            if ((!isset($_POST["email"]))) {
+                $errors++;
+                $errormsg .= "Je hebt geen geldig emailadres opgegeven.<br />";
+            }
+            
+            //reCAPTCHA controle
+            $Config = new Config();
+            $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
+                $_SERVER["REMOTE_ADDR"],
+                $_POST["recaptcha_challenge_field"],
+                $_POST["recaptcha_response_field"]);
+            
+            if ($captcha->is_valid) {
+                $errors++;
+                $errormsg .= "De CAPTCHA niet juist ingevuld.";
+            }
+            
+            
+            
+            
+            //Encryptie wachtwoorden
+            $password1md5 = md5($_POST["password1"]);
+            $password2md5 = md5($_POST["password2"]);
+            
+            if ($password1md5 != $password2md5) {
+                $errors++;
+                $errormsg .= "De twee wachtwoorden die je hebt opgegeven zijn niet gelijk.<br />";
+            }
+            
+            if ($errors > "0") {
+                echo "Je hebt niet alle velden juist ingevuld:<br /><br />";
+                echo $errormsg;
+            }
+            else {
+                $newuser = new Member();
+                $newuser->setUsername($_POST["username"]);
+                $newuser->setEmail($_POST["email"]);
+                $newuser->setPassword($password1md5);
+                $result = $newuser->validate();
+
+                if ($result == true) {
+                    echo "Account kan worden geregistreerd.";
+                    $newuser->save();
+                }
+                else {
+                    echo "Dit account bestaat al, registratie mislukt.";
+                }
+            }
+        }
+        ?>
         
         
     </body>
