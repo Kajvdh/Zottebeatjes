@@ -108,8 +108,6 @@ class Member {
     public function setEmail($email) {
         $this->_email = $email;
     }
-    
-    
 }
 
 ?>
