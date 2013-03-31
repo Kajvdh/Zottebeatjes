@@ -43,11 +43,11 @@ class Member {
     }
     
     //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
-    public function validate() {
+    public function available() {
         
         $this->createDbConnection();
         
-        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username` = ? OR email = ?");
+        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username` = ? OR email = ?;");
         $qry->execute(array($this->_username,$this->_email));
   
         
@@ -59,9 +59,23 @@ class Member {
         }
     }
     
+    //Controleer of deze gebruiker zijn gegevens juist zijn
+    public function verify() {
+        $this->createDbConnection();
+        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username`= ? AND `password` = ?;");
+        $qry->execute(array($this->_username,$this->_password));
+        
+        if ($qry->rowCount() == "1") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     //Gebruiker wegschrijven naar de database
     public function save() {
-        if (!$this->validate()) {
+        if (!$this->available()) {
             return false;
         }
         else {

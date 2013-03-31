@@ -2,7 +2,6 @@
 session_start();
 include 'includes.php';
 require_once 'lib/recaptchalib.php';
-
 $login = new Login();
 if ($login->getSession()) {
     // ingelogd
@@ -76,17 +75,22 @@ if ($login->getSession()) {
                 $errors++;
                 $errormsg .= "Je hebt geen geldig emailadres opgegeven.<br />";
             }
-            
-            //reCAPTCHA controle
-            $Config = new Config();
-            $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
-                $_SERVER["REMOTE_ADDR"],
-                $_POST["recaptcha_challenge_field"],
-                $_POST["recaptcha_response_field"]);
-            
-            if ($captcha->is_valid) {
+            if ((!isset($_POST['recaptcha_challenge_field'])) || (!isset($_POST['recaptcha_response_field']))) {
                 $errors++;
-                $errormsg .= "De CAPTCHA niet juist ingevuld.";
+                $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.";
+            }
+            else {
+                //reCAPTCHA controle
+                $Config = new Config();
+                $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
+                    $_SERVER["REMOTE_ADDR"],
+                    $_POST["recaptcha_challenge_field"],
+                    $_POST["recaptcha_response_field"]);
+
+                if (!$captcha->is_valid) {
+                    $errors++;
+                    $errormsg .= "De CAPTCHA niet juist ingevuld.";
+                }
             }
             
             
@@ -110,7 +114,7 @@ if ($login->getSession()) {
                 $newuser->setUsername($_POST["username"]);
                 $newuser->setEmail($_POST["email"]);
                 $newuser->setPassword($password1md5);
-                $result = $newuser->validate();
+                $result = $newuser->available();
 
                 if ($result == true) {
                     echo "Account kan worden geregistreerd.";

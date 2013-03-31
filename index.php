@@ -24,6 +24,7 @@ include 'includes.php';
         else {
             // wel ingelogd
             echo "Je bent ingelogd.";
+            echo "Klik <a href='logout.php'>hier</a> om uit te loggen. <br />";
         }
         ?>
     </body>
