@@ -7,6 +7,8 @@ if ($login->getSession()) {
     // ingelogd
     header("location:index.php");
 }
+$database = new Database();
+$db = $database->getConnection();
 ?>
 
 
@@ -152,7 +154,7 @@ if ($login->getSession()) {
                 echo $errormsg;
             }
             else {
-                $newuser = new Member();
+                $newuser = new Member($db);
                 $newuser->setUsername($_POST["username"]);
                 $newuser->setEmail($_POST["email"]);
                 $newuser->setPassword($password1md5);

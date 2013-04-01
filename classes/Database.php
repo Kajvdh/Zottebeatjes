@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
  * Description of Database
@@ -7,39 +11,39 @@
  * @author Kaj
  */
 class Database {
-    private $_mysqlHost;
-    private $_mysqlUser;
-    private $_mysqlPass;
-    private $_mysqlDbName;
     private $_db;
-    
     public function __construct() {
-        $config = new Config();
-        $mysqlCredentials = $config->getMysqlCredentials();
-        
-        $this->_mysqlHost = $mysqlCredentials["host"];
-        $this->_mysqlUser = $mysqlCredentials["user"];
-        $this->_mysqlPass = $mysqlCredentials["pass"];
-        $this->_mysqlDbName = $mysqlCredentials["db"];
-        
-        
-        $this->_db = new PDO('mysql:host='.$this->_mysqlHost.';dbname='.$this->_mysqlDbName.';charset=utf8',
-                $this->_mysqlUser,$this->_mysqlPass);
-        
-        $this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->_db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        
+        $this->createDbConnection();
     }
-    
-    public function test() {
-        try {
-            $this->_db->query('hi'); //foute query
-        } catch (PDOException $ex) {
-            echo "Er is een fout opgetreden!";
-            //fout kan opgehaald worden met $ex->getMessage();
+    private function createDbConnection() {
+        if ($this->_db) {
+            return true;
+        }
+        else {
+            
+            $config = new Config();
+            $mysqlCredentials = $config->getMysqlCredentials();
+            $host = $mysqlCredentials['host'];
+            $user = $mysqlCredentials['user'];
+            $pass = $mysqlCredentials['pass'];
+            $dbname = $mysqlCredentials['db'];
+            
+            try {
+                $db = new PDO('mysql:host='.$host.';dbname='.$dbname.';charset=utf8', $user, $pass);
+                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            }
+            catch(PDOException $ex) { 
+                //echo $ex->getMessage();
+                return false;
+            }
+            $this->_db = $db;
+            return true;
         }
     }
-    
+    public function getConnection() {
+        return $this->_db;
+    }
 }
 
 ?>

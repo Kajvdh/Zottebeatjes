@@ -1,6 +1,8 @@
 <?php
 session_start();
 include 'includes.php';
+$database = new Database();
+$db = $database->getConnection();
 ?>
 
 

@@ -11,41 +11,12 @@ class Member {
     private $_email;
     private $_db;
     
-    public function __construct() {
-        
-    }
-    
-    private function createDbConnection() {
-        if ($this->_db) {
-            return true;
-        }
-        else {
-            
-            $config = new Config();
-            $mysqlCredentials = $config->getMysqlCredentials();
-            $host = $mysqlCredentials['host'];
-            $user = $mysqlCredentials['user'];
-            $pass = $mysqlCredentials['pass'];
-            $dbname = $mysqlCredentials['db'];
-            
-            try {
-                $db = new PDO('mysql:host='.$host.';dbname='.$dbname.';charset=utf8', $user, $pass);
-                $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            }
-            catch(PDOException $ex) { 
-                //echo $ex->getMessage();
-                return false;
-            }
-            $this->_db = $db;
-            return true;
-        }
+    public function __construct(PDO $db) {
+        $this->_db = $db;
     }
     
     //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
     public function available() {
-        
-        $this->createDbConnection();
         
         $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username` = ? OR email = ?;");
         $qry->execute(array($this->_username,$this->_email));
@@ -61,7 +32,6 @@ class Member {
     
     //Controleer of deze gebruiker zijn gegevens juist zijn
     public function verify() {
-        $this->createDbConnection();
         $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username`= ? AND `password` = ?;");
         $qry->execute(array($this->_username,$this->_password));
         
