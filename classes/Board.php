@@ -30,6 +30,7 @@ class Board {
                 array_push($this->_categories,$category);
             }
         }
+        return $this->_categories;
     }
     
     public function getCategoryIds() {

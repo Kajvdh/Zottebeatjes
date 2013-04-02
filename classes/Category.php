@@ -23,6 +23,14 @@ class Category {
         $this->_forums = array();
     }
     
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function getCategoryname() {
+        return $this->categoryname;
+    }
+    
     public function getAllForums() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `forums` WHERE `category`= ?;");
         $stmt->execute(array($this->id));
@@ -36,6 +44,7 @@ class Category {
                 array_push($this->_forums,$forum);
             }
         }
+        return $this->_forums;
     }
     
     
@@ -48,9 +57,6 @@ class Category {
         
         $this->id = $row['id'];
         $this->categoryname = $row['categoryname'];
-    }
-    public function getId() {
-        return $this->id;
     }
 }
 

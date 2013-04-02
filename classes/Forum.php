@@ -23,6 +23,13 @@ class Forum {
         $this->_topics = array();
     }
     
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function getForumName() {
+        return $this->forumname;
+    }
     
     public function getAllTopics() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `topics` WHERE `forum`= ?;");
@@ -37,6 +44,7 @@ class Forum {
                 array_push($this->_topics,$topic);
             }
         }
+        return $this->_topics;
     }
     
     

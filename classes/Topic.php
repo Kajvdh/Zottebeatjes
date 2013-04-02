@@ -25,6 +25,14 @@ class Topic {
         $this->_posts = array();
     }
     
+    public function getId() {
+        return $this->id;
+    }
+    
+    public function getTitle() {
+        return $this->title;
+    }
+    
     
     public function getAllTopics() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `posts` WHERE `topic`= ?;");
@@ -39,6 +47,7 @@ class Topic {
                 array_push($this->_posts,$post);
             }
         }
+        return $this->_posts;
     }
     
     public function getById($id) {
