@@ -12,19 +12,11 @@ $db = $database->getConnection();
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home pagina</title>
         <script src="js/jquery/jquery-1.9.1.js"></script>
-        <script language="javascript">
-            $(document).ready(function() {
-                $("#testje").html("HAAAI!");
-            });
-            
-        </script>
-            
     </head>
     <body>
         <div id="testje">Hoi</div>
         <?php
         $login = new Login();
-
         if (!$login->getSession()) {
             // niet ingelogd
             echo "Je bent niet ingelogd. <br />";

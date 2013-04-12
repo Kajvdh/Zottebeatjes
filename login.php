@@ -1,9 +1,9 @@
 <?php
 session_start();
 include 'includes.php';
-?>
 
-<?php 
+$database = new Database();
+$db = $database->getConnection();
 
 $login = new Login();
 
@@ -65,7 +65,7 @@ else {
                     $username = $_POST['username'];
                     $password = md5($_POST['password']);
                     
-                    $member = new Member();
+                    $member = new Member($db);
                     $member->setUsername($username);
                     $member->setPassword($password);
                     
