@@ -25,6 +25,49 @@ class Post {
         $this->_db = $db;
     }
     
+    public function setTopic($topicId) {
+        $this->topic = $topicId;
+    }
+    public function setAuthor($author) {
+        $this->author = $author;
+    }
+    public function setIsNewTopic($is_new_topic) {
+        $this->is_new_topic = $is_new_topic;
+    }
+    public function setContent($content) {
+        $this->content = $content;
+    }
+    
+    public function available() {
+        return true;
+    }
+    
+    public function save() {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $qry = $this->_db->prepare("INSERT INTO posts(topic,author,postdate,is_new_topic,content) VALUES(:topic,:author,NOW(),:is_new_topic,:content);");
+            $data = array(
+                ':topic' => $this->topic,
+                ':author' => $this->author,
+                ':is_new_topic' => $this->is_new_topic,
+                ':content' => $this->content
+            );
+            
+            $qry->execute($data);
+            if ($qry->rowCount() > '0') {
+                echo "Gelukt!";
+                return true;
+            }
+            else {
+                echo "Mislukt!";
+                return false;
+            }
+        }
+    }
+    
+    
     public function getById($id) {
         $this->id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `posts` WHERE `id`= ?;");
@@ -37,7 +80,6 @@ class Post {
         $this->postdate = $row['postdate'];
         $this->is_new_topic = $row['is_new_topic'];
         $this->content = $row['content'];
-        
     }
 }
 

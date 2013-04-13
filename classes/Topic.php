@@ -16,7 +16,7 @@ class Topic {
     
     public $id;
     public $forum;
-    public $firstpost;
+    public $firstpost; //obsolete
     public $title;
     
     
@@ -33,9 +33,46 @@ class Topic {
         return $this->title;
     }
     
+    public function setTitle($title) {
+        $this->title = $title;
+    }
+    public function setForum($forumId) {
+        $this->forum = $forumId;
+    }
     
-    public function getAllTopics() {
-        $stmt = $this->_db->prepare("SELECT `id`FROM `posts` WHERE `topic`= ?;");
+    public function available() { //Niet zeker of dit nodig is
+        return true;
+    }
+    
+    
+    //Gebruiker wegschrijven naar de database
+    public function save() {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $qry = $this->_db->prepare("INSERT INTO topics(forum,title) VALUES(:forum,:title);");
+            $data = array(
+                ':forum' => $this->forum,
+                ':title' => $this->title
+            );
+            
+            $qry->execute($data);
+            if ($qry->rowCount() > '0') {
+                echo "Gelukt!";
+                $this->id = $this->_db->lastInsertId('id');
+                return true;
+            }
+            else {
+                echo "Mislukt!";
+                return false;
+            }
+        }
+    }
+    
+    
+    public function getAllPosts() {
+        $stmt = $this->_db->prepare("SELECT `id`FROM `posts` WHERE `topic`= ? ORDER BY `id` ASC;");
         $stmt->execute(array($this->id));
         
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -121,7 +121,7 @@ $db = $database->getConnection();
             }
             if ((!isset($_POST['recaptcha_challenge_field'])) || (!isset($_POST['recaptcha_response_field']))) {
                 $errors++;
-                $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.";
+                $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.<br />";
             }
             else {
                 //reCAPTCHA controle
