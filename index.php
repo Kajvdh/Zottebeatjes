@@ -14,7 +14,6 @@ $db = $database->getConnection();
         <script src="js/jquery/jquery-1.9.1.js"></script>
     </head>
     <body>
-        <div id="testje">Hoi</div>
         <?php
         $login = new Login();
         if (!$login->getSession()) {
@@ -25,8 +24,9 @@ $db = $database->getConnection();
         }
         else {
             // wel ingelogd
-            echo "Je bent ingelogd.";
+            echo "Je bent ingelogd. <br />";
             echo "Klik <a href='logout.php'>hier</a> om uit te loggen. <br />";
+            echo "Klik <a href='board.php'>hier</a> om naar het forum te gaan. <br />";
         }
         ?>
     </body>
