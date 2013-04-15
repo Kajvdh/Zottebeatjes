@@ -11,6 +11,8 @@ require_once 'classes/Forum.php';
 require_once 'classes/Topic.php';
 require_once 'classes/Post.php';
 
+require_once('smarty.php');
+
 $config = new Config();
 if ($config->getErrorMode() == "dev") {
     error_reporting(E_ALL);

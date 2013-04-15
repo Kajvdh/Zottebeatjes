@@ -5,6 +5,8 @@ include 'includes.php';
 $database = new Database();
 $db = $database->getConnection();
 ?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,18 +22,25 @@ $db = $database->getConnection();
                  */
             }
             else {
+                
                 $topic = new Topic($db);
                 $topic->getById($_GET['t']);
                 
                 $posts = $topic->getAllPosts();
+                
+                $dataArr = array();
+                
                 foreach ($posts as $post) {
-                    echo "<hr /><br />";
-                    echo "ID: " . $post->getId() . "<br />";
-                    echo "Content: " . $post->getContent() . "<br />";
-                    echo "Postdate: " . $post->getPostdate() . "<br />";
-                    echo "<hr /><br />";
+                    $postArr = array();
+                    $postArr['id'] = $post->getId();
+                    $postArr['author'] = "naamloos";
+                    $postArr['content'] = $post->getContent();
+                    $postArr['postdate'] = $post->getPostdate();
+                    array_push($dataArr,$postArr);
                 }
                 
+                $smarty->assign('posts',$dataArr);
+                $smarty->display('topic.tpl');
             }
         ?>
     </body>
