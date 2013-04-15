@@ -109,6 +109,9 @@ $db = $database->getConnection();
                 /**
                  * @todo: Controle of de gebruiker, opgeslagen in de sessie, wel echt bestaat
                  */
+                
+                                
+                
                 ?>
 
 

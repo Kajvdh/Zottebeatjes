@@ -46,7 +46,17 @@ $db = $database->getConnection();
             $id = $_GET['f'];
             echo "<a href='post.php?f=".$id."'>Topic aanmaken</a><br />";
             
+            $forum = new Forum($db);
+            $forum->getById($id);
+            $topics = $forum->getAllTopics();
             
+            
+            echo "<ul>";
+            foreach($topics as $topic) {
+                $url = 'topic.php?t='.$topic->getId();
+                echo "<li><a href='".$url."'>".$topic->getTitle()."</a></li><br />";
+            }
+            echo "</ul>";
             
             
             

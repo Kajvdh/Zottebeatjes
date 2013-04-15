@@ -32,7 +32,7 @@ class Category {
     }
     
     public function getAllForums() {
-        $stmt = $this->_db->prepare("SELECT `id`FROM `forums` WHERE `category`= ?;");
+        $stmt = $this->_db->prepare("SELECT `id` FROM `forums` WHERE `category`= ?;");
         $stmt->execute(array($this->id));
         
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -38,6 +38,22 @@ class Post {
         $this->content = $content;
     }
     
+    public function getId() {
+        return $this->id;
+    }
+    public function getAuthor() {
+        return $this->author;
+    }
+    public function getPostdate() {
+        return $this->postdate;
+    }
+    public function getIsNewTopic() {
+        return $this->is_new_topic;
+    }
+    public function getContent() {
+        return $this->content;
+    }
+    
     public function available() {
         return true;
     }
@@ -81,6 +97,8 @@ class Post {
         $this->is_new_topic = $row['is_new_topic'];
         $this->content = $row['content'];
     }
+    
+    
 }
 
 ?>
