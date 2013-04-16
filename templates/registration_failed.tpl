@@ -5,3 +5,5 @@
         <li>{$error}</li>
     {/foreach}
 </ul>
+<br />
+<a href="#" onClick="history.back();">Vorige</a>
