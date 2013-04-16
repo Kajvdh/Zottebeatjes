@@ -7,40 +7,129 @@ $db = $database->getConnection();
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
-$dataArr = array();
-if (isset($_GET['c'])) {
-    $category = new Category($db);
-    $category->getById($_GET['c']);
+
+
+if (isset($_GET['t'])) {
+    //Topic id opgegeven
     
-    $dataArr['category'] = array();
+    $topic = new Topic($db);
+    $topic->getById($_GET['t']);
+    
+    
+    /**
+     * Navigatiemenu data
+     */
+    $dataArr['topic'] = array(); //Data array voor de navigationmenu template
+    $forum = new Forum($db);
+    $forum->getById($topic->getForum());
+    $category = new Category($db);
+    $category->getById($forum->getCategory());
+    
     $dataArr['category']['id'] = $category->getId();
     $dataArr['category']['name'] = $category->getCategoryname();
-}
+    $dataArr['forum']['id'] = $forum->getId();
+    $dataArr['forum']['name'] = $forum->getForumName();
+    $dataArr['topic']['id'] = $topic->getId();
+    $dataArr['topic']['name'] = $topic->getTitle();
     
-if (isset($_GET['f'])) {
+    $smarty->assign('data',$dataArr);
+    $smarty->display('navmenu.tpl');
+    /**
+     * Topic weergeven
+     */
+    $posts = $topic->getAllPosts();
+    $dataArr = array(); //Data array voor de topic template
+
+    foreach ($posts as $post) {
+        $postArr = array();
+        $postArr['id'] = $post->getId();
+        $postArr['author'] = "naamloos";
+        $postArr['content'] = $post->getContent();
+        $postArr['postdate'] = $post->getPostdate();
+        array_push($dataArr,$postArr);
+    }
+
+    $smarty->assign('posts',$dataArr);
+    $smarty->display('topic.tpl');
+}
+elseif (isset($_GET['f'])) {
+    //Forum id opgegeven
+    
     $forum = new Forum($db);
     $forum->getById($_GET['f']);
     
-    $dataArr['forum'] = array();
+    /**
+     * Navigatiemenu
+     */
+    $category = new Category($db);
+    $category->getById($forum->getCategory());
+    
+    $dataArr['category']['id'] = $category->getId();
+    $dataArr['category']['name'] = $category->getCategoryname();
     $dataArr['forum']['id'] = $forum->getId();
     $dataArr['forum']['name'] = $forum->getForumName();
     
-    $categoryId = $forum->getCategory();
-    $category = new Category($db);
-    $category->getById($categoryId);
-    
-    $dataArr['category'] = array();
-    $dataArr['category']['id'] = $category->getId();
-    $dataArr['category']['name'] = $category->getCategoryname();    
+    $smarty->assign('data',$dataArr);
+    $smarty->display('navmenu.tpl');
+    /**
+     * Forum weergeven
+     */
+    $topics = $forum->getAllTopics();
+    $dataArr = array(); //Data array voor de forum template
+
+    foreach($topics as $topic) {
+        $topicArr = array();
+        $topicArr['id'] = $topic->getId();
+        $topicArr['title'] = $topic->getTitle();
+        array_push($dataArr,$topicArr);
+    }
+
+    $smarty->assign('forumId',$forum->getId());
+    $smarty->assign('topics',$dataArr);
+    $smarty->display('forum.tpl');
 }
+elseif (isset($_GET['c'])) {
+    //Categorie id opgegeven
+    
+    $category = new Category($db);
+    $category->getById($_GET['c']);
+    
+    /**
+     * Navigatiemenu
+     */
+    $dataArr['category']['id'] = $category->getId();
+    $dataArr['category']['name'] = $category->getCategoryname();
+    
+    $smarty->assign('data',$dataArr);
+    $smarty->display('navmenu.tpl');
+    /**
+     * Categorie weergeven
+     */
+    $forums = $category->getAllForums();
+    $dataArr = array();
+    
+    foreach($forums as $forum) {
+        $forumArr = array();
+        $forumArr['id'] = $forum->getId();
+        $forumArr['name'] = $forum->getForumName();
+        array_push($dataArr,$forumArr);
+    }
 
-
-$smarty->assign('data',$dataArr);
-$smarty->display('navmenu.tpl');
-
-
-if ((!isset($_GET['c'])) && (!isset($_GET['f']))) {
-    //Alle categoriën met hun forum laten zien
+    $smarty->assign('forums',$dataArr);
+    $smarty->display('category.tpl');
+}
+else {
+    //Geen topic/forum/categorie gespecifierd -> Categorieën en forums weergeven
+    
+    /**
+     * Navigatiemenu
+     */
+    //Geen data om naar het navigatiemenu te sturen
+    $smarty->display('navmenu.tpl');
+    
+    /**
+     * Categoriëen met bijbehorende forums weergeven
+     */
     $board = new Board($db);
     $categories = $board->getAllCategories();
 
@@ -68,48 +157,6 @@ if ((!isset($_GET['c'])) && (!isset($_GET['f']))) {
     }
     $smarty->assign('categories',$dataArr);
     $smarty->display('board.tpl');
-}
-elseif (isset($_GET['f'])) {
-    //Forum laden
-    $forumId = $_GET['f'];
-
-    $forum = new Forum($db);
-    $forum->getById($forumId);
-    $topics = $forum->getAllTopics();
-
-    $dataArr = array();
-
-    foreach($topics as $topic) {
-        $topicArr = array();
-        $topicArr['id'] = $topic->getId();
-        $topicArr['title'] = $topic->getTitle();
-        array_push($dataArr,$topicArr);
-    }
-
-    $smarty->assign('forumId',$forumId);
-
-    $smarty->assign('topics',$dataArr);
-    $smarty->display('forum.tpl');
-
-}
-elseif (isset($_GET['c'])) {
-    //Categorie laden
-    $categoryId = $_GET['c'];
-    $category = new Category($db);
-    $category->getById($categoryId);
-
-    $forums = $category->getAllForums();
-
-    $dataArr = array();
-    foreach($forums as $forum) {
-        $forumArr = array();
-        $forumArr['id'] = $forum->getId();
-        $forumArr['name'] = $forum->getForumName();
-        array_push($dataArr,$forumArr);
-    }
-
-    $smarty->assign('forums',$dataArr);
-    $smarty->display('category.tpl');
 }
 
 echo PHP_EOL;

@@ -2,6 +2,6 @@
 
 <ul>
 {foreach from=$topics item=topic}
-    <li><a href="topic.php?t={$topic['id']}">{$topic['title']}</a></li><br />
+    <li><a href="?t={$topic['id']}">{$topic['title']}</a></li><br />
 {/foreach}
 </ul>
