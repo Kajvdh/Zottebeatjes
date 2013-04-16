@@ -29,6 +29,10 @@ class Topic {
         return $this->id;
     }
     
+    public function getForum() {
+        return $this->forum;
+    }
+    
     public function getTitle() {
         return $this->title;
     }

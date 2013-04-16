@@ -7,6 +7,38 @@ $db = $database->getConnection();
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
+$dataArr = array();
+if (isset($_GET['c'])) {
+    $category = new Category($db);
+    $category->getById($_GET['c']);
+    
+    $dataArr['category'] = array();
+    $dataArr['category']['id'] = $category->getId();
+    $dataArr['category']['name'] = $category->getCategoryname();
+}
+    
+if (isset($_GET['f'])) {
+    $forum = new Forum($db);
+    $forum->getById($_GET['f']);
+    
+    $dataArr['forum'] = array();
+    $dataArr['forum']['id'] = $forum->getId();
+    $dataArr['forum']['name'] = $forum->getForumName();
+    
+    $categoryId = $forum->getCategory();
+    $category = new Category($db);
+    $category->getById($categoryId);
+    
+    $dataArr['category'] = array();
+    $dataArr['category']['id'] = $category->getId();
+    $dataArr['category']['name'] = $category->getCategoryname();    
+}
+
+
+$smarty->assign('data',$dataArr);
+$smarty->display('navmenu.tpl');
+
+
 if ((!isset($_GET['c'])) && (!isset($_GET['f']))) {
     //Alle categoriën met hun forum laten zien
     $board = new Board($db);

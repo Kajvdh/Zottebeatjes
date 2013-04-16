@@ -8,6 +8,36 @@ $db = $database->getConnection();
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
+$dataArr = array();
+if (isset($_GET['t'])) {
+    $topic = new Topic($db);
+    $topic->getById($_GET['t']);
+    
+    $dataArr['topic'] = array();
+    $dataArr['topic']['id'] = $topic->getId();
+    $dataArr['topic']['name'] = $topic->getTitle();
+    
+    
+    $forumId = $topic->getForum();
+    $forum = new Forum($db);
+    $forum->getById($forumId);
+    
+    $dataArr['forum'] = array();
+    $dataArr['forum']['id'] = $forum->getId();
+    $dataArr['forum']['name'] = $forum->getForumName();
+    
+    $categoryId = $forum->getCategory();
+    $category = new Category($db);
+    $category->getById($categoryId);
+    
+    $dataArr['category'] = array();
+    $dataArr['category']['id'] = $category->getId();
+    $dataArr['category']['name'] = $category->getCategoryname(); 
+    
+}
+$smarty->assign('data',$dataArr);
+$smarty->display('navmenu.tpl');
+
 
 if (!isset($_GET['t'])) {
     //Geen topic id opgegeven

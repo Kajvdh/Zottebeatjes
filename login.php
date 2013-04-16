@@ -8,12 +8,9 @@ $db = $database->getConnection();
 $login = new Login();
 
 if (!$login->getSession()) {
-    // niet ingelogd
-    echo "Je bent niet ingelogd.";
+    
 }
 else {
-    // wel ingelogd
-    echo "Je bent ingelogd.";
     header("location:index.php");
 }
 

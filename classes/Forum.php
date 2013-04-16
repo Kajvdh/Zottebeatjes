@@ -31,6 +31,10 @@ class Forum {
         return $this->forumname;
     }
     
+    public function getCategory() {
+        return $this->category;
+    }
+    
     public function getAllTopics() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `topics` WHERE `forum`= ?;");
         $stmt->execute(array($this->id));
