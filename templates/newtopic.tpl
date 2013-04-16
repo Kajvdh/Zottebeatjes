@@ -37,7 +37,7 @@
 <form name="TopicMake" id="postform" method="post" action="post.php" >
    <fieldset>
        <legend>Topic aanmaken</legend>
-       <input type="hidden" name="postform" value="true" />
+       <input type="hidden" name="newtopic" value="true" />
        <input type="hidden" name="forumid" value="{$forumId}" />
 
        <label for="topicname">Topic titel:</label>

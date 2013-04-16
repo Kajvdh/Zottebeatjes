@@ -50,6 +50,7 @@ if (isset($_GET['t'])) {
     }
 
     $smarty->assign('posts',$dataArr);
+    $smarty->assign('topicId',$topic->getId());
     $smarty->display('topic.tpl');
 }
 elseif (isset($_GET['f'])) {

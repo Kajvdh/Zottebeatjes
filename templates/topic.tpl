@@ -4,3 +4,6 @@
 	{$post['content']}
 	<hr />
 {/foreach}
+
+
+<br /><br /><a href="post.php?t={$topicId}">Reageren</a>

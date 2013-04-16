@@ -17,7 +17,90 @@ if (!$login->getSession()) {
     echo "Klik <a href='login.php'>hier</a> om in te loggen. <br />";
 }
 else {
+    if (isset($_POST['newtopic'])) {
+        //Form om een nieuw topic te maken is ingevuld
+        
+        $errors = "0";
+        $errormsg = "";
+        
+        if ((!isset($_POST['forumid']))) {
+            $errors++;
+            $errormsg .= "In dit forum kan geen post geplaatst worden.<br />";
+        }
 
+        if ((!isset($_POST['topicname'])) || (strlen($_POST['topicname']) < "3")) {
+            $errors++;
+            $errormsg .= "Je hebt geen geldige topictitel opgegeven.<br />";
+        }
+        if ((!isset($_POST['post'])) || (strlen($_POST['post']) < "1")) {
+            $errors++;
+            $errorsmsg .= "Je hebt geen post ingevuld.<br />";
+        }
+
+        if ($errors > "0") {
+            echo "Je hebt niet alle velden correct ingevuld:<br /><br />";
+            echo $errorsmsg;
+        }
+        else {
+            //Juist ingevuld, post in de database wegschrijven
+            $post = new Post($db);
+            $topic = new Topic($db);
+            /**
+             * @todo: uitlezen wie de poster is uit de sessie
+             */
+            $author = "4";
+
+            $topic->setForum($_POST['forumid']);
+            $topic->setTitle($_POST['topicname']);
+            $topic->save();
+            $topicid = $topic->getId();
+
+            $post->setTopic($topicid);
+            $post->setAuthor($author);
+            $post->setContent($_POST['post']);
+            $post->setIsNewTopic(true);
+            $post->save();
+        }
+        
+    }
+    elseif (isset($_POST['newpost'])) {
+        //Form om een nieuwe post te plaatsen in een bestaand topic is ingevuld
+        
+        $errors = "0";
+        $errormsg = "";
+        
+        if ((!isset($_POST['topicid']))) {
+            $errors++;
+            $errormsg .= "In dit topic kan geen post geplaatst worden.<br />";
+        }
+        
+        if ((!isset($_POST['post'])) || (strlen($_POST['post']) < "1")) {
+            $errors++;
+            $errorsmsg .= "Je hebt geen post ingevuld.<br />";
+        }
+
+        if ($errors > "0") {
+            echo "Je hebt niet alle velden correct ingevuld:<br /><br />";
+            echo $errorsmsg;
+        }
+        else {
+            //Juist ingevuld, post in de database wegschrijven
+            $post = new Post($db);
+            /**
+             * @todo: uitlezen wie de poster is uit de sessie
+             */
+            $author = "4";
+            
+            $post->setTopic($_POST['topicid']);
+            $post->setAuthor($author);
+            $post->setContent($_POST['post']);
+            $post->setIsNewTopic(false);
+            $post->save();
+        }
+    }
+    
+    
+    
     if (isset($_POST['postform'])) {
         //Er is al een post geplaatst
         //Parameters inlezen
@@ -71,11 +154,22 @@ else {
         /**
          * @todo: Controle of de gebruiker, opgeslagen in de sessie, wel echt bestaat
          */
-        $smarty->assign('forumId',$_GET['f']);
-        $smarty->display('newtopic.tpl');
+        
+        if (isset($_GET['t'])) {
+            //Reageren op een topic
+            $smarty->assign('topicId',$_GET['t']);
+            $smarty->display('newpost.tpl');
+        }
+        elseif (isset($_GET['f'])) {
+            //Nieuw topic aanmaken
+            $smarty->assign('forumId',$_GET['f']);
+            $smarty->display('newtopic.tpl');
+        }
+        
+        
+        
     }
 }
-
 
 echo PHP_EOL;
 $smarty->display('footer.tpl');
