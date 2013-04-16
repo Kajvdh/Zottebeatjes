@@ -73,11 +73,9 @@ class Post {
             
             $qry->execute($data);
             if ($qry->rowCount() > '0') {
-                echo "Gelukt!";
                 return true;
             }
             else {
-                echo "Mislukt!";
                 return false;
             }
         }

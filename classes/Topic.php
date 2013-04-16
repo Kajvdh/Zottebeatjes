@@ -59,12 +59,10 @@ class Topic {
             
             $qry->execute($data);
             if ($qry->rowCount() > '0') {
-                echo "Gelukt!";
                 $this->id = $this->_db->lastInsertId('id');
                 return true;
             }
             else {
-                echo "Mislukt!";
                 return false;
             }
         }

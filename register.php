@@ -9,168 +9,91 @@ if ($login->getSession()) {
 }
 $database = new Database();
 $db = $database->getConnection();
-?>
 
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Registreren</title>
-        <script src="js/jquery/jquery-1.9.1.js"></script>
-        <script src="js/jquery/jquery.validate.js"></script>
-        <script>
-            $(document).ready(function() {
-                $("#regform").validate({
-                    rules: {
-                        username: {
-                            required: true,
-                            minlength: 3
-                        },
-                        email: {
-                            required: true,
-                            email: true
-                        },
-                        password1: {
-                            required: true,
-                            minlength: 8
-                        },
-                        password2: {
-                            required: true,
-                            minlength: 8,
-                            equalTo: "#password1"
-                        }
-                    },
-                    messages: {
-                        username: {
-                            required: "Gelieve een gebruikersnaam in te vullen.",
-                            minlength: "Een gebruikersnaam moet minstens 3 tekens bevatten."
-                        },
-                        email: "Gelieve een geldig e-mailadres in te vullen.",
-                        password1: {
-                            required: "Gelieve een wachtwoord in te vullen.",
-                            minlength: "Een wachtwoord moet minstens 8 tekens bevatten.",
-                        },
-                        password2: {
-                            required: "Gelieve een wachtwoord in te vullen.",
-                            minlength: "Een wachtwoord moet minstens 8 tekens bevatten.",
-                            equalTo: "De twee opgegeven wachtwoorden komen niet overeen."
-                        }
-                    }
-                
-                });
-            });
-        </script>
-    </head>
-    <body>
-        <?php
-        if (!isset($_POST['regform'])) {
-        ?>
-        
-        <form name="register" id="regform" method="post" action="register.php" >
-            <fieldset>
-                <legend>Registreren</legend>
-                <input type="hidden" name="regform" value="true" />
-                
-                <label for="username">Gebruikersnaam:</label>
-                <input type="text" id="username" name="username" id="username" />
-                <br />
-                <label for="email">Emailadres:</label>
-                <input type="text" id="email" name="email" id="email" />
-                <br />
-                <label for="password1">Wachtwoord:</label>
-                <input type="password" id="password1" name="password1" id="password1" />
-                <br />
-                <label for="password2">Wachtwoord (nogmaals):</label>
-                <input type="password" id="password2" name="password2" id="password2" />
-                <br />
-                
-                <?php
-                $config = new Config();
-                $publickey = $config->getCaptchaPublicKey();
+$smarty->display('header.tpl');
+echo PHP_EOL;
 
 
-                echo recaptcha_get_html($publickey);
 
-                ?>
-                <input id="submitbutton" type="submit" value="Registreer!" />
-            </fieldset>
-        </form>
-        <?php
+if (!isset($_POST['regform'])) {
+    $config = new Config();
+    $publickey = $config->getCaptchaPublicKey();
+
+    $smarty->assign('recaptcha',recaptcha_get_html($publickey));
+    $smarty->display('registerform.tpl');
+}
+else {
+    //Controle velden
+    /**
+     * @todo: Controle van de velden verbeteren
+     * + Asynchrone controle via AJAX bij het invullen van het form.
+     */
+    $errors = "0";
+    $errormsg = "";
+
+    if ((!isset($_POST["username"]) || strlen($_POST["username"] < "3"))) {
+        $errors++;
+        $errormsg .= "Je hebt geen geldige gebruikersnaam opgegeven.<br />";
+    }
+    if ((!isset($_POST["password1"]) || (!isset($_POST["password2"]) || strlen($_POST["password1"] < "8")))) {
+        $errors++;
+        $errormsg .= "Je hebt geen geldig wachtwoord opgegeven.<br />";
+    }
+    if ((!isset($_POST["email"]))) {
+        $errors++;
+        $errormsg .= "Je hebt geen geldig emailadres opgegeven.<br />";
+    }
+    if ((!isset($_POST['recaptcha_challenge_field'])) || (!isset($_POST['recaptcha_response_field']))) {
+        $errors++;
+        $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.<br />";
+    }
+    else {
+        //reCAPTCHA controle
+        $Config = new Config();
+        $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["recaptcha_challenge_field"],
+            $_POST["recaptcha_response_field"]);
+
+        if (!$captcha->is_valid) {
+            $errors++;
+            $errormsg .= "De CAPTCHA niet juist ingevuld.";
+        }
+    }
+
+
+    //Encryptie wachtwoorden
+    $password1md5 = md5($_POST["password1"]);
+    $password2md5 = md5($_POST["password2"]);
+
+    if ($password1md5 != $password2md5) {
+        $errors++;
+        $errormsg .= "De twee wachtwoorden die je hebt opgegeven zijn niet gelijk.<br />";
+    }
+
+    if ($errors > "0") {
+        echo "Je hebt niet alle velden juist ingevuld:<br /><br />";
+        echo $errormsg;
+    }
+    else {
+        $newuser = new Member($db);
+        $newuser->setUsername($_POST["username"]);
+        $newuser->setEmail($_POST["email"]);
+        $newuser->setPassword($password1md5);
+        $result = $newuser->available();
+
+        if ($result == true) {
+            echo "Account kan worden geregistreerd.";
+            $newuser->save();
         }
         else {
-            //Controle velden
-            /**
-             * @todo: Controle van de velden verbeteren
-             * + Asynchrone controle via AJAX bij het invullen van het form.
-             */
-            $errors = "0";
-            $errormsg = "";
-            
-            if ((!isset($_POST["username"]) || strlen($_POST["username"] < "3"))) {
-                $errors++;
-                $errormsg .= "Je hebt geen geldige gebruikersnaam opgegeven.<br />";
-            }
-            if ((!isset($_POST["password1"]) || (!isset($_POST["password2"]) || strlen($_POST["password1"] < "8")))) {
-                $errors++;
-                $errormsg .= "Je hebt geen geldig wachtwoord opgegeven.<br />";
-            }
-            if ((!isset($_POST["email"]))) {
-                $errors++;
-                $errormsg .= "Je hebt geen geldig emailadres opgegeven.<br />";
-            }
-            if ((!isset($_POST['recaptcha_challenge_field'])) || (!isset($_POST['recaptcha_response_field']))) {
-                $errors++;
-                $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.<br />";
-            }
-            else {
-                //reCAPTCHA controle
-                $Config = new Config();
-                $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
-                    $_SERVER["REMOTE_ADDR"],
-                    $_POST["recaptcha_challenge_field"],
-                    $_POST["recaptcha_response_field"]);
-
-                if (!$captcha->is_valid) {
-                    $errors++;
-                    $errormsg .= "De CAPTCHA niet juist ingevuld.";
-                }
-            }
-            
-            
-            
-            
-            //Encryptie wachtwoorden
-            $password1md5 = md5($_POST["password1"]);
-            $password2md5 = md5($_POST["password2"]);
-            
-            if ($password1md5 != $password2md5) {
-                $errors++;
-                $errormsg .= "De twee wachtwoorden die je hebt opgegeven zijn niet gelijk.<br />";
-            }
-            
-            if ($errors > "0") {
-                echo "Je hebt niet alle velden juist ingevuld:<br /><br />";
-                echo $errormsg;
-            }
-            else {
-                $newuser = new Member($db);
-                $newuser->setUsername($_POST["username"]);
-                $newuser->setEmail($_POST["email"]);
-                $newuser->setPassword($password1md5);
-                $result = $newuser->available();
-
-                if ($result == true) {
-                    echo "Account kan worden geregistreerd.";
-                    $newuser->save();
-                }
-                else {
-                    echo "Dit account bestaat al, registratie mislukt.";
-                }
-            }
+            echo "Dit account bestaat al, registratie mislukt.";
         }
-        ?>
-        
-        
-    </body>
-</html>
+    }
+}
+
+echo PHP_EOL;
+$smarty->display('footer.tpl');
+
+?>
