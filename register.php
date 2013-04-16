@@ -10,7 +10,6 @@ if ($login->getSession()) {
 $database = new Database();
 $db = $database->getConnection();
 
-
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
@@ -29,24 +28,19 @@ else {
      * @todo: Controle van de velden verbeteren
      * + Asynchrone controle via AJAX bij het invullen van het form.
      */
-    $errors = "0";
-    $errormsg = "";
+    $errorArr = array();
 
     if ((!isset($_POST["username"]) || strlen($_POST["username"] < "3"))) {
-        $errors++;
-        $errormsg .= "Je hebt geen geldige gebruikersnaam opgegeven.<br />";
+        array_push($errorArr,"Je hebt geen geldige gebruikersnaam opgegeven.");
     }
     if ((!isset($_POST["password1"]) || (!isset($_POST["password2"]) || strlen($_POST["password1"] < "8")))) {
-        $errors++;
-        $errormsg .= "Je hebt geen geldig wachtwoord opgegeven.<br />";
+        array_push($errorArr,"Je hebt geen geldig wachtwoord opgegeven.");
     }
     if ((!isset($_POST["email"]))) {
-        $errors++;
-        $errormsg .= "Je hebt geen geldig emailadres opgegeven.<br />";
+        array_push($errorArr,"Je hebt geen geldig emailadres opgegeven.");
     }
     if ((!isset($_POST['recaptcha_challenge_field'])) || (!isset($_POST['recaptcha_response_field']))) {
-        $errors++;
-        $errormsg .= "CAPTCHA fout, contacteer een als deze fout zich voordoet.<br />";
+        array_push($errorArr,"CAPTCHA fout, contacteer een administrator als deze fout zich blijft voordoen.");
     }
     else {
         //reCAPTCHA controle
@@ -57,8 +51,7 @@ else {
             $_POST["recaptcha_response_field"]);
 
         if (!$captcha->is_valid) {
-            $errors++;
-            $errormsg .= "De CAPTCHA niet juist ingevuld.";
+            array_push($errorArr,"De CAPTCHA is niet juist ingevuld.");
         }
     }
 
@@ -68,27 +61,31 @@ else {
     $password2md5 = md5($_POST["password2"]);
 
     if ($password1md5 != $password2md5) {
-        $errors++;
-        $errormsg .= "De twee wachtwoorden die je hebt opgegeven zijn niet gelijk.<br />";
+        array_push($errorArr,"De twee opgegeven wachtwoorden komen niet overeen.");
     }
 
-    if ($errors > "0") {
-        echo "Je hebt niet alle velden juist ingevuld:<br /><br />";
-        echo $errormsg;
+    if (count($errorArr) > "0") {
+        $smarty->assign('errors',$errorArr);
+        $smarty->display('registrations_failed.tpl');
     }
     else {
         $newuser = new Member($db);
         $newuser->setUsername($_POST["username"]);
         $newuser->setEmail($_POST["email"]);
         $newuser->setPassword($password1md5);
-        $result = $newuser->available();
 
-        if ($result == true) {
-            echo "Account kan worden geregistreerd.";
-            $newuser->save();
+        if (!$newuser->available()) {
+            //Gebruikersnaam of emailadres wordt al gebruikt
+            $smarty->assign('errors',"Deze gebruikersnaam of dit e-mailadres is al in gebruik.");
+            $smarty->display('registration_failed.tpl');
+        }
+        elseif ($newuser->save()) {
+            $smarty->display('registration_successfull.tpl');
         }
         else {
-            echo "Dit account bestaat al, registratie mislukt.";
+            //Registratie mislukt
+            $smarty->assign('errors',"Door technische problemen kon het account niet worden geregistreerd, als deze fout zich blijft voortdoen contacteer dan een administrator.");
+            $smarty->display('registration_failed.tpl');
         }
     }
 }
