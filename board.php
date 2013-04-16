@@ -19,63 +19,72 @@ $db = $database->getConnection();
             $board = new Board($db);
             $categories = $board->getAllCategories();
 
+            $dataArr = array();
+            
             //Lus door alle Categoriëen
             foreach($categories as $category) {
-                $url = '?c='.$category->getId();
-                echo "<hr /><center><b><a href='".$url."'>".$category->getCategoryname()."</a></b></center><hr />";
-
-
-                echo "<ul>";
+                $categoryArr = array();
+                
+                $categoryArr['id'] = $category->getId();
+                $categoryArr['name'] = $category->getCategoryname();
+                $categoryArr['forums'] = array();
+                
+                
                 $forums = $category->getAllForums();
-                //Lus door alle forums
+                
                 foreach($forums as $forum) {
-                    $url = '?f='.$forum->getId();
-                    echo "<li><a href='".$url."'>".$forum->getForumname()."</a></li><br />";
-
-    //                $topics = $forum->getAllTopics();
-    //                //Lus door alle topics
-    //                foreach($topics as $topic) {
-    //                    echo "Topic: ".$topic->getTitle()."<br />";
-    //                }
+                    $forumArr = array();
+                    $forumArr['id'] = $forum->getId();
+                    $forumArr['name'] = $forum->getForumName();
+                    
+                    array_push($categoryArr['forums'],$forumArr);
                 }
-                echo "</ul>";
+                array_push($dataArr,$categoryArr);
             }
+            $smarty->assign('categories',$dataArr);
+            $smarty->display('board.tpl');
         }
         elseif (isset($_GET['f'])) {
             //Forum laden
-            $id = $_GET['f'];
-            echo "<a href='post.php?f=".$id."'>Topic aanmaken</a><br />";
+            $forumId = $_GET['f'];
             
             $forum = new Forum($db);
-            $forum->getById($id);
+            $forum->getById($forumId);
             $topics = $forum->getAllTopics();
             
+            $dataArr = array();
             
-            echo "<ul>";
             foreach($topics as $topic) {
-                $url = 'topic.php?t='.$topic->getId();
-                echo "<li><a href='".$url."'>".$topic->getTitle()."</a></li><br />";
+                $topicArr = array();
+                $topicArr['id'] = $topic->getId();
+                $topicArr['title'] = $topic->getTitle();
+                array_push($dataArr,$topicArr);
             }
-            echo "</ul>";
             
+            $smarty->assign('forumId',$forumId);
             
-            
+            $smarty->assign('topics',$dataArr);
+            $smarty->display('forum.tpl');
             
         }
         elseif (isset($_GET['c'])) {
             //Categorie laden
-            $id = $_GET['c'];
+            $categoryId = $_GET['c'];
             $category = new Category($db);
-            $category->getById($id);
+            $category->getById($categoryId);
             
-            echo "<ul>";
             $forums = $category->getAllForums();
-            //Lus door alle forums
+            
+            $dataArr = array();
             foreach($forums as $forum) {
-                $url = '?f='.$forum->getId();
-                echo "<li><a href='".$url."'>".$forum->getForumname()."</a></li><br />";
+                $forumArr = array();
+                $forumArr['id'] = $forum->getId();
+                $forumArr['name'] = $forum->getForumName();
+                array_push($dataArr,$forumArr);
             }
-            echo "</ul>";
+            
+            $smarty->assign('forums',$dataArr);
+            $smarty->display('category.tpl');
         }
         ?>
     </body>
