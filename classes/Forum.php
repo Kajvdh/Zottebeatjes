@@ -51,16 +51,21 @@ class Forum {
         return $this->_topics;
     }
     
-    
     public function getById($id) {
         $this->id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `forums` WHERE `id`= ?;");
         $stmp->execute(array($this->id));
-        $row = $stmp->fetch(PDO::FETCH_ASSOC);
         
-        $this->id = $row['id'];
-        $this->category = $row['category'];
-        $this->forumname = $row['forumname'];
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->id = $row['id'];
+            $this->category = $row['category'];
+            $this->forumname = $row['forumname'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     

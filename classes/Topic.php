@@ -71,8 +71,7 @@ class Topic {
             }
         }
     }
-    
-    
+        
     public function getAllPosts() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `posts` WHERE `topic`= ? ORDER BY `id` ASC;");
         $stmt->execute(array($this->id));
@@ -93,12 +92,18 @@ class Topic {
         $this->id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `topics` WHERE `id`= ?;");
         $stmp->execute(array($this->id));
-        $row = $stmp->fetch(PDO::FETCH_ASSOC);
         
-        $this->id = $row['id'];
-        $this->forum = $row['forum'];
-        $this->firstpost = $row['firstpost'];
-        $this->title = $row['title'];
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->id = $row['id'];
+            $this->forum = $row['forum'];
+            $this->firstpost = $row['firstpost'];
+            $this->title = $row['title'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
 }

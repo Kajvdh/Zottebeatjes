@@ -48,15 +48,20 @@ class Category {
     }
     
     
-    
     public function getById($id) {
         $this->id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `categories` WHERE `id`= ?;");
         $stmp->execute(array($this->id));
-        $row = $stmp->fetch(PDO::FETCH_ASSOC);
         
-        $this->id = $row['id'];
-        $this->categoryname = $row['categoryname'];
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->id = $row['id'];
+            $this->categoryname = $row['categoryname'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 
