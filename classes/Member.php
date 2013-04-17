@@ -6,9 +6,18 @@
  * @author Kaj
  */
 class Member {
+    private $_id;
     private $_username;
-    private $_password;
     private $_email;
+    private $_password;
+    private $_avatar;
+    private $_signature;
+    private $_posts;
+    private $_registerdate;
+    private $_lastlogin;
+    private $_lastip;
+    private $_usergroup;
+    
     private $_db;
     
     public function __construct(PDO $db) {
@@ -30,13 +39,39 @@ class Member {
         }
     }
     
+    //Gebruikersgegevens ophalen uit de database op basis van id
+    public function getById($id) {
+        $stmp = $this->_db->prepare("SELECT * FROM `users` WHERE `id` = ?;");
+        $stmp->execute(array($id));
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->_id = $row['id'];
+            $this->_username = $row['username'];
+            $this->_email = $row['email'];
+            $this->_password = $row['password'];
+            $this->_avatar = $row['avatar'];
+            $this->_signature = $row['signature'];
+            $this->_posts = $row['posts'];
+            $this->_registerdate = $row['registerdate'];
+            $this->_lastlogin = $row['lastlogin'];
+            $this->_lastip = $row['lastip'];
+            $this->_usergroup = $row['usergroup'];
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
     //Controleer of deze gebruiker zijn gegevens juist zijn
     public function verify() {
-        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username`= ? AND `password` = ?;");
-        $qry->execute(array($this->_username,$this->_password));
+        $stmp = $this->_db->prepare("SELECT `id` FROM `users` WHERE `username`= ? AND `password` = ?;");
+        $stmp->execute(array($this->_username,$this->_password));
         
-        if ($qry->rowCount() == "1") {
-            return true;
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->_id = $row['id'];
+            return $this->_id;
         }
         else {
             return false;
@@ -75,6 +110,26 @@ class Member {
     }
     public function setEmail($email) {
         $this->_email = $email;
+    }
+    public function setLastloginNow() {
+        $qry = $this->_db->prepare("UPDATE users SET lastlogin=NOW() WHERE id=?");
+        $qry->execute(array($this->_id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public function setLastIp($ip) {
+        $qry = $this->_db->prepare("UPDATE users SET lastip=? WHERE id=?");
+        $qry->execute(array($ip,$this->_id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }
 

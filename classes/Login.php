@@ -14,8 +14,8 @@ class Login {
             if (isset($_SESSION['login'])) { return $_SESSION['login']; }
             else { return false; }
         }
-        public function setSession($username) {
-            $_SESSION['login'] = $username;
+        public function setSession($uid) {
+            $_SESSION['login'] = $uid;
         }
     }
 

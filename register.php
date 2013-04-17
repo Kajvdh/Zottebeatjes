@@ -66,7 +66,7 @@ else {
 
     if (count($errorArr) > "0") {
         $smarty->assign('errors',$errorArr);
-        $smarty->display('registrations_failed.tpl');
+        $smarty->display('registration_failed.tpl');
     }
     else {
         $newuser = new Member($db);
@@ -80,7 +80,7 @@ else {
             $smarty->display('registration_failed.tpl');
         }
         elseif ($newuser->save()) {
-            $smarty->display('registration_successfull.tpl');
+            $smarty->display('registration_succesfull.tpl');
         }
         else {
             //Registratie mislukt
