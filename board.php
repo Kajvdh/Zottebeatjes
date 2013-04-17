@@ -42,7 +42,19 @@ if (isset($_GET['t'])) {
         foreach ($posts as $post) {
             $postArr = array();
             $postArr['id'] = $post->getId();
-            $postArr['author'] = "naamloos";
+            
+            /**
+             * Author ophalen
+             */
+            $authorId = $post->getAuthor();
+            $member = new Member($db);
+            if ($member->getById($authorId)) {
+                $postArr['author'] = $member->getUsername();
+            }
+            else {
+                $postArr['author'] = "Onbekende gebruiker";
+            }
+            
             $postArr['content'] = $post->getContent();
             $postArr['postdate'] = $post->getPostdate();
             array_push($dataArr,$postArr);

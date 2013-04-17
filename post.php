@@ -12,34 +12,34 @@ echo PHP_EOL;
 $login = new Login();
 if (!$login->getSession()) {
     // niet ingelogd
-    echo "Je bent niet ingelogd. <br />";
-    echo "Klik <a href='register.php'>hier</a> om je te registreren. <br />";
-    echo "Klik <a href='login.php'>hier</a> om in te loggen. <br />";
+    $smarty->display('notloggedin.tpl');
 }
 else {
     if (isset($_POST['newtopic'])) {
         //Form om een nieuw topic te maken is ingevuld
         
-        $errors = "0";
-        $errormsg = "";
+        $errorArr = array();
         
         if ((!isset($_POST['forumid']))) {
-            $errors++;
-            $errormsg .= "In dit forum kan geen post geplaatst worden.<br />";
+            array_push($errorArr,"Het forum waar je een topic probeert te plaatsen bestaat niet.");
+        }
+        else {
+            $forum = new Forum($db);
+            if(!$forum->getById($_POST['forumid'])) {
+                array_push($errorArr,"Het forum waar je een topic probeert te plaatsen bestaat niet.");
+            }
         }
 
         if ((!isset($_POST['topicname'])) || (strlen($_POST['topicname']) < "3")) {
-            $errors++;
-            $errormsg .= "Je hebt geen geldige topictitel opgegeven.<br />";
+            array_push($errorArr,"Je hebt geen geldige topictitel opgegeven.");
         }
         if ((!isset($_POST['post'])) || (strlen($_POST['post']) < "1")) {
-            $errors++;
-            $errorsmsg .= "Je hebt geen post ingevuld.<br />";
+            array_push($errorArr,"Je hebt geen post ingevuld.");
         }
 
-        if ($errors > "0") {
-            echo "Je hebt niet alle velden correct ingevuld:<br /><br />";
-            echo $errorsmsg;
+        if (count($errorArr) > "0") {
+            $smarty->assign('errors',$errorArr);
+            $smarty->display('error.tpl');
         }
         else {
             //Juist ingevuld, post in de database wegschrijven
@@ -48,40 +48,43 @@ else {
             /**
              * @todo: uitlezen wie de poster is uit de sessie
              */
-            $author = "4";
+            $author = $login->getSession();
 
             $topic->setForum($_POST['forumid']);
             $topic->setTitle($_POST['topicname']);
             $topic->save();
-            $topicid = $topic->getId();
 
-            $post->setTopic($topicid);
+            $post->setTopic($topic->getId());
             $post->setAuthor($author);
             $post->setContent($_POST['post']);
             $post->setIsNewTopic(true);
             $post->save();
+            header("location:board.php?t=".$topic->getId());
         }
         
     }
     elseif (isset($_POST['newpost'])) {
         //Form om een nieuwe post te plaatsen in een bestaand topic is ingevuld
         
-        $errors = "0";
-        $errormsg = "";
+        $errorArr = array();
         
         if ((!isset($_POST['topicid']))) {
-            $errors++;
-            $errormsg .= "In dit topic kan geen post geplaatst worden.<br />";
+            array_push($errorArr,"Het topic waar je een reactie probeert te plaatsen bestaat niet.");
+        }
+        else {
+            $topic = new Topic($db);
+            if (!$topic->getById($_POST['topicid'])) {
+                array_push($errorArr,"Het topic waar je een reactie probeert te plaatsen bestaat niet.");
+            }
         }
         
         if ((!isset($_POST['post'])) || (strlen($_POST['post']) < "1")) {
-            $errors++;
-            $errorsmsg .= "Je hebt geen post ingevuld.<br />";
+            array_push($errorArr,"Je hebt geen post ingevuld.");
         }
 
-        if ($errors > "0") {
-            echo "Je hebt niet alle velden correct ingevuld:<br /><br />";
-            echo $errorsmsg;
+        if (count($errorArr) > "0") {
+            $smarty->assign('errors',$errorArr);
+            $smarty->display('error.tpl');
         }
         else {
             //Juist ingevuld, post in de database wegschrijven
@@ -89,62 +92,14 @@ else {
             /**
              * @todo: uitlezen wie de poster is uit de sessie
              */
-            $author = "4";
+            $author = $login->getSession();
             
             $post->setTopic($_POST['topicid']);
             $post->setAuthor($author);
             $post->setContent($_POST['post']);
             $post->setIsNewTopic(false);
             $post->save();
-        }
-    }
-    
-    
-    
-    if (isset($_POST['postform'])) {
-        //Er is al een post geplaatst
-        //Parameters inlezen
-
-        $errors = "0";
-        $errormsg = "";
-
-        if ((!isset($_POST['forumid']))) {
-            $errors++;
-            $errormsg .= "In dit forum kan geen post geplaatst worden.<br />";
-        }
-
-        if ((!isset($_POST['topicname'])) || (strlen($_POST['topicname']) < "3")) {
-            $errors++;
-            $errormsg .= "Je hebt geen geldige topictitel opgegeven.<br />";
-        }
-        if ((!isset($_POST['post'])) || (strlen($_POST['post']) < "1")) {
-            $errors++;
-            $errorsmsg .= "Je hebt geen post ingevuld.<br />";
-        }
-
-        if ($errors > "0") {
-            echo "Je hebt niet alle velden correct ingevuld:<br /><br />";
-            echo $errorsmsg;
-        }
-        else {
-            //Juist ingevuld, post in de database wegschrijven
-            $post = new Post($db);
-            $topic = new Topic($db);
-            /**
-             * @todo: uitlezen wie de poster is uit de sessie
-             */
-            $author = "4";
-
-            $topic->setForum($_POST['forumid']);
-            $topic->setTitle($_POST['topicname']);
-            $topic->save();
-            $topicid = $topic->getId();
-
-            $post->setTopic($topicid);
-            $post->setAuthor($author);
-            $post->setContent($_POST['post']);
-            $post->setIsNewTopic(true);
-            $post->save();
+            header("location:board.php?t=".$post->getTopic());
         }
     }
     else {
@@ -165,9 +120,12 @@ else {
             $smarty->assign('forumId',$_GET['f']);
             $smarty->display('newtopic.tpl');
         }
-        
-        
-        
+        else {
+            $errorArr = array();
+            array_push($errorArr,"Onvolledige link");
+            $smarty->assign('errors',$errorArr);
+            $smarty->display('error.tpl');
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-04-16 09:54:03
+<?php /* Smarty version Smarty-3.1.13, created on 2013-04-17 14:54:11
          compiled from "templates\newtopic.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:24562516d03874e94e0-50784246%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '92b302f9b1210e4c55542e3c3ff6f15e295ebcb9' => 
     array (
       0 => 'templates\\newtopic.tpl',
-      1 => 1366098841,
+      1 => 1366125960,
       2 => 'file',
     ),
   ),
@@ -62,7 +62,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <form name="TopicMake" id="postform" method="post" action="post.php" >
    <fieldset>
        <legend>Topic aanmaken</legend>
-       <input type="hidden" name="postform" value="true" />
+       <input type="hidden" name="newtopic" value="true" />
        <input type="hidden" name="forumid" value="<?php echo $_smarty_tpl->tpl_vars['forumId']->value;?>
 " />
 

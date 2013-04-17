@@ -53,6 +53,9 @@ class Post {
     public function getContent() {
         return $this->content;
     }
+    public function getTopic() {
+        return $this->topic;
+    }
     
     public function available() {
         return true;

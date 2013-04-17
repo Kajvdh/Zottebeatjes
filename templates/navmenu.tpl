@@ -4,7 +4,7 @@
         -> <a href="board.php?f={$data['forum']['id']}">{$data['forum']['name']}</a>
         
         {if isset($data['topic'])}
-            -> <a href="topic.php?t={$data['topic']['id']}">{$data['topic']['name']}</a>
+            -> <a href="board.php?t={$data['topic']['id']}">{$data['topic']['name']}</a>
         {/if}
     {/if}
 {/if}

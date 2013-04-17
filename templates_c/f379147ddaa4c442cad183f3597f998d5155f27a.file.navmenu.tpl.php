@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-04-16 11:27:44
+<?php /* Smarty version Smarty-3.1.13, created on 2013-04-17 14:54:08
          compiled from "templates\navmenu.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:24300516d184c8c00f4-74405002%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f379147ddaa4c442cad183f3597f998d5155f27a' => 
     array (
       0 => 'templates\\navmenu.tpl',
-      1 => 1366104462,
+      1 => 1366203246,
       2 => 'file',
     ),
   ),
@@ -33,7 +33,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 </a>
         
         <?php if (isset($_smarty_tpl->tpl_vars['data']->value['topic'])){?>
-            -> <a href="topic.php?t=<?php echo $_smarty_tpl->tpl_vars['data']->value['topic']['id'];?>
+            -> <a href="board.php?t=<?php echo $_smarty_tpl->tpl_vars['data']->value['topic']['id'];?>
 "><?php echo $_smarty_tpl->tpl_vars['data']->value['topic']['name'];?>
 </a>
         <?php }?>

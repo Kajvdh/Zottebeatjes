@@ -44,9 +44,6 @@ elseif (isset($_POST['loginform'])) {
             header("location:index.php");
         }
     }
-
-
-
 }
 else {
     $smarty->display('loginform.tpl');

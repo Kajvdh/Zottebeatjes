@@ -121,6 +121,11 @@ class Member {
             return false;
         }
     }
+    
+    public function getUsername() {
+        return $this->_username;
+    }
+    
     public function setLastIp($ip) {
         $qry = $this->_db->prepare("UPDATE users SET lastip=? WHERE id=?");
         $qry->execute(array($ip,$this->_id));
