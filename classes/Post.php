@@ -96,10 +96,8 @@ class Post {
         $this->author = $row['author'];
         $this->postdate = $row['postdate'];
         $this->is_new_topic = $row['is_new_topic'];
-        $this->content = $row['content'];
+        $this->content = nl2br($row['content']);
     }
-    
-    
 }
 
 ?>
