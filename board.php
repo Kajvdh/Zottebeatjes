@@ -4,6 +4,14 @@ include 'includes.php';
 $database = new Database();
 $db = $database->getConnection();
 
+$login = new Login();
+if ($login->getSession()) {
+    $member = new Member($db);
+    $member->getById($login->getSession());
+    $smarty->assign('login',$member->getUsername());
+}
+
+
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
@@ -50,6 +58,16 @@ if (isset($_GET['t'])) {
             $member = new Member($db);
             if ($member->getById($authorId)) {
                 $postArr['author'] = $member->getUsername();
+                
+                if (@is_array(getimagesize($member->getAvatar()))) {
+                    $postArr['author_avatar'] = $member->getAvatar();
+                }
+                if ($member->getSignature() != "") {
+                    $postArr['author_signature'] = $member->getSignature();
+                }
+                if ($member->getPosts()) {
+                    $postArr['author_posts'] = $member->getPosts();
+                }
             }
             else {
                 $postArr['author'] = "Onbekende gebruiker";
@@ -59,7 +77,6 @@ if (isset($_GET['t'])) {
             $postArr['postdate'] = $post->getPostdate();
             array_push($dataArr,$postArr);
         }
-
         $smarty->assign('posts',$dataArr);
         $smarty->assign('topicId',$topic->getId());
         $smarty->display('topic.tpl');
