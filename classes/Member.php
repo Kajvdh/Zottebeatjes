@@ -22,6 +22,64 @@ class Member {
     
     public function __construct(PDO $db) {
         $this->_db = $db;
+        $this->_avatar = "";
+        $this->_signature = "";
+        $this->_posts = "0";
+    }
+    
+    public function getId() {
+        return $this->_id;
+    }
+    public function getUsername() {
+        return $this->_username;
+    }
+    public function setUsername($username) {
+        $this->_username = $username;
+    }
+    public function getEmail() {
+        return $this->_email;
+    }
+    public function setEmail($email) {
+        $this->_email = $email;
+    }
+    public function getPassword() {
+        return $this->_password;
+    }
+    public function setPassword($password) {
+        $this->_password = $password;
+    }
+    public function getAvatar() {
+        return $this->_avatar;
+    }
+    public function setAvatar($avatar) {
+        $this->_avatar = $avatar;
+    }
+    public function getSignature() {
+        return $this->_signature;
+    }
+    public function setSignature($signature) {
+        $this->_signature = $signature;
+    }
+    public function getPosts() {
+        return $this->_posts;
+    }
+    public function setPosts($posts) {
+        $this->_posts = $posts;
+    }
+    public function getRegisterdate() {
+        return $this->_registerdate;
+    }
+    public function getLastlogin() {
+        return $this->_lastlogin;
+    }
+    public function getLastip() {
+        return $this->_lastip;
+    }
+    public function getUsergroup() {
+        return $this->_usergroup;
+    }
+    public function setUsergroup($usergroup) {
+        $this->_usergroup = $usergroup;
     }
     
     //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
@@ -36,6 +94,17 @@ class Member {
         }
         else {
             return true;
+        }
+    }
+    
+    public function incPosts() {
+        $stmp = $this->_db->prepare("UPDATE users SET `posts` = `posts` + 1 WHERE id=?");
+        $stmp->execute(array($this->_id));
+        if ($stmp->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
         }
     }
     
@@ -84,11 +153,14 @@ class Member {
             return false;
         }
         else {
-            $qry = $this->_db->prepare("INSERT INTO users(username,email,password,registerdate,lastip,usergroup) VALUES (:username,:email,:password,NOW(),:lastip,:usergroup);");
+            $qry = $this->_db->prepare("INSERT INTO users(username,email,password,avatar,posts,signature,registerdate,lastip,usergroup) VALUES (:username,:email,:password,:avatar,:posts,:signature,NOW(),:lastip,:usergroup);");
             $data = array(
                 ':username' => $this->_username,
                 ':email' => $this->_email,
                 ':password' => $this->_password,
+                ':avatar' => $this->_avatar,
+                ':posts' => $this->_posts,
+                ':signature' => $this->_signature,
                 ':lastip' => $_SERVER['REMOTE_ADDR'],
                 ':usergroup' => '1'            
             );
@@ -102,15 +174,9 @@ class Member {
         }
     }
     
-    public function setUsername($username) {
-        $this->_username = $username;
-    }
-    public function setPassword($password) {
-        $this->_password = $password;
-    }
-    public function setEmail($email) {
-        $this->_email = $email;
-    }
+    
+    
+    
     public function setLastloginNow() {
         $qry = $this->_db->prepare("UPDATE users SET lastlogin=NOW() WHERE id=?");
         $qry->execute(array($this->_id));
@@ -122,9 +188,7 @@ class Member {
         }
     }
     
-    public function getUsername() {
-        return $this->_username;
-    }
+    
     
     public function setLastIp($ip) {
         $qry = $this->_db->prepare("UPDATE users SET lastip=? WHERE id=?");
