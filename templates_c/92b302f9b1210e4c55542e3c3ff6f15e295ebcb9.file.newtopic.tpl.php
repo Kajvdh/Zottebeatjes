@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-04-17 14:54:11
+<?php /* Smarty version Smarty-3.1.13, created on 2013-04-18 16:20:14
          compiled from "templates\newtopic.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:24562516d03874e94e0-50784246%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:194735170011e48ad71-00637337%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,19 +11,19 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '24562516d03874e94e0-50784246',
+  'nocache_hash' => '194735170011e48ad71-00637337',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.13',
-  'unifunc' => 'content_516d038752fba5_88334564',
   'variables' => 
   array (
     'forumId' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.13',
+  'unifunc' => 'content_5170011e52aa48_91239266',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_516d038752fba5_88334564')) {function content_516d038752fba5_88334564($_smarty_tpl) {?><script src="js/jquery/jquery-1.9.1.js"></script>
+<?php if ($_valid && !is_callable('content_5170011e52aa48_91239266')) {function content_5170011e52aa48_91239266($_smarty_tpl) {?><script src="js/jquery/jquery-1.9.1.js"></script>
 <script src="js/jquery/jquery.validate.js"></script>
 <script src="js/jquery/jquery-ui.1.10.2.custom.js"></script>
 <script>

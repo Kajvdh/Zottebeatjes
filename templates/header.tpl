@@ -105,7 +105,8 @@
         
     <div id="menubar">
     <a href="index.php"><img src="images/button_home.jpg" alt="Home" onmouseover="this.src='images/button_home_hover.jpg'" onmouseout="this.src='images/button_home.jpg'" /></a>
-    <a href="board.php"><img src="images/button_board.jpg" alt="Home" onmouseover="this.src='images/button_board_hover.jpg'" onmouseout="this.src='images/button_board.jpg'" /></a>
+    <a href="board.php"><img src="images/button_board.jpg" alt="Board" onmouseover="this.src='images/button_board_hover.jpg'" onmouseout="this.src='images/button_board.jpg'" /></a>
+    <a href="chat.php"><img src="images/button_chat.gif" alt="Chat" onmouseover="this.src='images/button_chat_hover.gif'" onmouseout="this.src='images/button_chat.gif'" /></a>
     
     {if isset($login)}
         <a href="logout.php"><img src="images/button_loguit.jpg" alt="Log uit" onmouseover="this.src='images/button_loguit_hover.jpg'" onmouseout="this.src='images/button_loguit.jpg'" /></a>
