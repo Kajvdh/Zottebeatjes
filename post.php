@@ -5,6 +5,13 @@ require_once 'lib/recaptchalib.php';
 $database = new Database();
 $db = $database->getConnection();
 
+$login = new Login();
+if ($login->getSession()) {
+    $member = new Member($db);
+    $member->getById($login->getSession());
+    $smarty->assign('login',$member->getUsername());
+}
+
 $smarty->display('header.tpl');
 echo PHP_EOL;
 
@@ -59,6 +66,10 @@ else {
             $post->setContent($_POST['post']);
             $post->setIsNewTopic(true);
             $post->save();
+            
+            $member = new Member($db);
+            $member->getById($author);
+            $member->incPosts();
             header("location:board.php?t=".$topic->getId());
         }
         
@@ -99,6 +110,10 @@ else {
             $post->setContent($_POST['post']);
             $post->setIsNewTopic(false);
             $post->save();
+            
+            $member = new Member($db);
+            $member->getById($author);
+            $member->incPosts();
             header("location:board.php?t=".$post->getTopic());
         }
     }
