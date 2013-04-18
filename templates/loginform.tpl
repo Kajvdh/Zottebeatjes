@@ -20,9 +20,12 @@
     });
 </script>
 
+<a href="register.php"><img src="images/button_registreer.gif" alt="Nieuw" onmouseover="this.src='images/button_registreer_hover.gif'" onmouseout="this.src='images/button_registreer.gif'" /></a>
+<br /><br />  
+
 <form name="login" id="loginform" method="post" action="login.php" >
     <fieldset>
-        <legend>Registreren</legend>
+        <legend>Inloggen</legend>
         <input type="hidden" name="loginform" value="true" />
 
         <label for="username">Gebruikersnaam:</label>
