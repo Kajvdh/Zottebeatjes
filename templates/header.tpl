@@ -5,6 +5,7 @@
         <title>Home pagina</title>
         <script src="js/jquery/jquery-1.9.1.js"></script>
         <script src="js/jquery/jquery.marquee.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
         <script>
             var streaminfo;
             function getStreamData() {
@@ -72,21 +73,48 @@
         
     </head>
     <body>
-    <marquee behavior="scroll" scrollamount="2" direction="left" id="streaminfo" ><div id="streaminfo">Welkom op Zottebeatjes.be!</div></marquee>
-
-    <!-- Media player -->
-    <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="180" height="60" bgcolor="#FFFFFF">
-    <param name="movie" value="http://www.museter.com/ffmp3-config.swf" />
-    <param name="flashvars" value="url=http://sunbow.be:8000/;&lang=en&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/mcclean/ffmp3-mcclean.xml&title=Zottebeatjes&welcome=WELCOME%20TO ZOTTEBEAT" />
-    <param name="wmode" value="window" />
-    <param name="allowscriptaccess" value="always" />
-    <param name="scale" value="noscale" />
-    <embed src="http://www.museter.com/ffmp3-config.swf" flashvars="url=http://sunbow.be:8000/;&lang=en&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/mcclean/ffmp3-mcclean.xml&title=Zottebeatjes&welcome=WELCOME%20TO ZOTTEBEAT" width="180" scale="noscale" height="60" wmode="window" bgcolor="#FFFFFF" allowscriptaccess="always" type="application/x-shockwave-flash" />
-    </object>
-    <!-- Media player end -->
-
-    <center>
-    <h3>Zottebeatjes.be</h3><br />
-    </center>
-    <a href="index.php">Index</a> | <a href="board.php">Board</a> | <a href="stream.php">Stream</a> <br /><br />
+    <div id="wrapper">
+    <div id="header">
+        <pre>
+ ______     _   _       _                _   _             _          
+|___  /    | | | |     | |              | | (_)           | |         
+   / / ___ | |_| |_ ___| |__   ___  __ _| |_ _  ___  ___  | |__   ___ 
+  / / / _ \| __| __/ _ \ '_ \ / _ \/ _` | __| |/ _ \/ __| | '_ \ / _ \
+ / /_| (_) | |_| ||  __/ |_) |  __/ (_| | |_| |  __/\__ \_| |_) |  __/
+/_____\___/ \__|\__\___|_.__/ \___|\__,_|\__| |\___||___(_)_.__/ \___|
+                                           _/ |                       
+                                          |__/                        
+        </pre>
+    </div>
+    <div id="radioplayer">
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="467" height="26">
+        <param name="movie" value="http://www.museter.com/ffmp3-config.swf" />
+        <param name="flashvars" value="url=http://sunbow.be:8000/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" />
+        <param name="wmode" value="transparent" />
+        <param name="allowscriptaccess" value="always" />
+        <param name="scale" value="noscale" />
+        <embed src="http://www.museter.com/ffmp3-config.swf" flashvars="url=http://sunbow.be:8000/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" width="467" scale="noscale" height="26" wmode="transparent" allowscriptaccess="always" type="application/x-shockwave-flash" />
+        </object>
+    </div>
+    <div id="streaminfobar">
+        <marquee behavior="scroll" scrollamount="2" direction="left" ><div id="streaminfo">Welkom op Zottebeatjes.be!</div></marquee>
+    </div>
         
+        
+    
+        
+    <div id="menubar">
+    <a href="index.php"><img src="images/button_home.jpg" alt="Home" onmouseover="this.src='images/button_home_hover.jpg'" onmouseout="this.src='images/button_home.jpg'" /></a>
+    <a href="board.php"><img src="images/button_board.jpg" alt="Home" onmouseover="this.src='images/button_board_hover.jpg'" onmouseout="this.src='images/button_board.jpg'" /></a>
+    
+    {if isset($login)}
+        <a href="logout.php"><img src="images/button_loguit.jpg" alt="Log uit" onmouseover="this.src='images/button_loguit_hover.jpg'" onmouseout="this.src='images/button_loguit.jpg'" /></a>
+        (ingelogd als {$login})
+    {else}
+        <a href="login.php"><img src="images/button_login.jpg" alt="Login" onmouseover="this.src='images/button_login_hover.jpg'" onmouseout="this.src='images/button_login.jpg'" /></a>
+    {/if}
+    
+    
+    </div>
+   <div id="content">
+       <div id="contentwrapper">
