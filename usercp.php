@@ -5,8 +5,8 @@ $database = new Database();
 $db = $database->getConnection();
 
 $login = new Login();
+$member = new Member($db);
 if ($login->getSession()) {
-    $member = new Member($db);
     $member->getById($login->getSession());
     $smarty->assign('login',$member->getUsername());
 }
@@ -16,7 +16,8 @@ $smarty->display('header.tpl');
 echo PHP_EOL;
 
 
-if (!$member->getById($login->getSession())) {
+
+if (!$member->getUsername()) {
     //gebruiker niet ingelogd
     $smarty->display('not_logged_in.tpl');
 }
