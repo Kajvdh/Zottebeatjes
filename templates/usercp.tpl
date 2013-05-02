@@ -1,6 +1,5 @@
 <h2>Avatar</h2>
 
-<h3>Huidige avatar</h3>
 {if isset($avatar)}
     Huidige avatar:<br />
     <img src="{$avatar}" alt="avatar" />
