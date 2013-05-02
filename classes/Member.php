@@ -174,7 +174,26 @@ class Member {
         }
     }
     
-    
+    public function updateAvatar() {
+        $qry = $this->_db->prepare("UPDATE users SET avatar=? WHERE id=?");
+        $qry->execute(array($this->_avatar,$this->_id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public function updateSignature() {
+        $qry = $this->_db->prepare("UPDATE users SET signature=? WHERE id=?");
+        $qry->execute(array($this->_signature,$this->_id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     
     
     public function setLastloginNow() {

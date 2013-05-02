@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once 'classes/Config.php';
 require_once 'classes/Database.php';
 require_once 'classes/Login.php';

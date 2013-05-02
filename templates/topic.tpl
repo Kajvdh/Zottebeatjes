@@ -1,5 +1,7 @@
-<a href="post.php?t={$topicId}"><img src="images/button_reageer.gif" alt="Reageer" onmouseover="this.src='images/button_reageer_hover.gif'" onmouseout="this.src='images/button_reageer.gif'" /></a>
-<br /><br />   
+{if isset($login)}
+    <a href="post.php?t={$topicId}"><img src="images/button_reageer.gif" alt="Reageer" onmouseover="this.src='images/button_reageer_hover.gif'" onmouseout="this.src='images/button_reageer.gif'" /></a>
+<br /><br />
+{/if}
 
 
 {foreach from=$posts item=post}
@@ -13,6 +15,7 @@
         {/if}
         
         {if isset($post['author_posts'])}
+            <br />
             {$post['author_posts']}
         {/if}
         </div>

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-04-18 16:48:50
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-02 19:58:35
          compiled from "templates\topic.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:19962517005536b5c85-36726887%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'd04aa44cfa65c3d73481f3e0aa5902a1ab8cca37' => 
     array (
       0 => 'templates\\topic.tpl',
-      1 => 1366296529,
+      1 => 1366902935,
       2 => 'file',
     ),
   ),
@@ -19,15 +19,18 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_51700553780802_05938094',
   'variables' => 
   array (
+    'login' => 0,
     'topicId' => 0,
     'posts' => 0,
     'post' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_51700553780802_05938094')) {function content_51700553780802_05938094($_smarty_tpl) {?><a href="post.php?t=<?php echo $_smarty_tpl->tpl_vars['topicId']->value;?>
+<?php if ($_valid && !is_callable('content_51700553780802_05938094')) {function content_51700553780802_05938094($_smarty_tpl) {?><?php if (isset($_smarty_tpl->tpl_vars['login']->value)){?>
+    <a href="post.php?t=<?php echo $_smarty_tpl->tpl_vars['topicId']->value;?>
 "><img src="images/button_reageer.gif" alt="Reageer" onmouseover="this.src='images/button_reageer_hover.gif'" onmouseout="this.src='images/button_reageer.gif'" /></a>
-<br /><br />   
+<br /><br />
+<?php }?>
 
 
 <?php  $_smarty_tpl->tpl_vars['post'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['post']->_loop = false;
@@ -47,6 +50,7 @@ $_smarty_tpl->tpl_vars['post']->_loop = true;
         <?php }?>
         
         <?php if (isset($_smarty_tpl->tpl_vars['post']->value['author_posts'])){?>
+            <br />
             <?php echo $_smarty_tpl->tpl_vars['post']->value['author_posts'];?>
 
         <?php }?>

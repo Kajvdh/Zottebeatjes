@@ -89,11 +89,11 @@
     <div id="radioplayer">
         <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="467" height="26">
         <param name="movie" value="http://www.museter.com/ffmp3-config.swf" />
-        <param name="flashvars" value="url=http://sunbow.be:8000/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" />
+        <param name="flashvars" value="url=http://sunbow.be:8080/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" />
         <param name="wmode" value="transparent" />
         <param name="allowscriptaccess" value="always" />
         <param name="scale" value="noscale" />
-        <embed src="http://www.museter.com/ffmp3-config.swf" flashvars="url=http://sunbow.be:8000/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" width="467" scale="noscale" height="26" wmode="transparent" allowscriptaccess="always" type="application/x-shockwave-flash" />
+        <embed src="http://www.museter.com/ffmp3-config.swf" flashvars="url=http://sunbow.be:8080/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" width="467" scale="noscale" height="26" wmode="transparent" allowscriptaccess="always" type="application/x-shockwave-flash" />
         </object>
     </div>
     <div id="streaminfobar">
@@ -109,6 +109,7 @@
     <a href="chat.php"><img src="images/button_chat.gif" alt="Chat" onmouseover="this.src='images/button_chat_hover.gif'" onmouseout="this.src='images/button_chat.gif'" /></a>
     
     {if isset($login)}
+        <a href="usercp.php"><img src="images/button_usercp.gif" alt="User CP" onmouseover="this.src='images/button_usercp_hover.gif'" onmouseout="this.src='images/button_usercp.gif'" /></a>
         <a href="logout.php"><img src="images/button_loguit.jpg" alt="Log uit" onmouseover="this.src='images/button_loguit_hover.jpg'" onmouseout="this.src='images/button_loguit.jpg'" /></a>
         (ingelogd als {$login})
     {else}
@@ -117,5 +118,5 @@
     
     
     </div>
-   <div id="content">
-       <div id="contentwrapper">
+    <div id="content">
+        <div id="contentwrapper">
