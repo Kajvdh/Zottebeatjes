@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-02 20:07:12
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-02 20:40:24
          compiled from "templates\usercp.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:3016451829c0bd47a04-15819573%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6f8bf459ba326631b1085bb88dfdf76a19d4c443' => 
     array (
       0 => 'templates\\usercp.tpl',
-      1 => 1367518030,
+      1 => 1367518950,
       2 => 'file',
     ),
   ),
@@ -26,7 +26,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_51829c0bd7b106_94425474')) {function content_51829c0bd7b106_94425474($_smarty_tpl) {?><h2>Avatar</h2>
 
-<h3>Huidige avatar</h3>
 <?php if (isset($_smarty_tpl->tpl_vars['avatar']->value)){?>
     Huidige avatar:<br />
     <img src="<?php echo $_smarty_tpl->tpl_vars['avatar']->value;?>

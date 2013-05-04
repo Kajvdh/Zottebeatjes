@@ -15,10 +15,12 @@ require_once 'classes/WebPoll.php';
 require_once 'classes/Poll.php';
 require_once 'classes/Answer.php';
 
+require 'lib/PHPMailer/class.phpmailer.php';
+
 require_once 'classes/Stream.php';
 
 require_once('smarty.php');
-
+global $config;
 $config = new Config();
 if ($config->getErrorMode() == "dev") {
     error_reporting(E_ALL);
