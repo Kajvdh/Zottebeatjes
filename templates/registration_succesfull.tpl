@@ -1,3 +1,2 @@
 <p>Het account is succesvol geregistreerd.<br />
-Klik <a href="login.php">hier</a> om in te loggen.
-</p>
+    Er is een e-mail verstuurd naar het opgegeven emailadres om je account te activeren.</p>

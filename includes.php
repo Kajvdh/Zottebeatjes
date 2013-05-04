@@ -12,10 +12,12 @@ require_once 'classes/Forum.php';
 require_once 'classes/Topic.php';
 require_once 'classes/Post.php';
 
+require 'lib/PHPMailer/class.phpmailer.php';
+
 require_once 'classes/Stream.php';
 
 require_once('smarty.php');
-
+global $config;
 $config = new Config();
 if ($config->getErrorMode() == "dev") {
     error_reporting(E_ALL);

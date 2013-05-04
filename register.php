@@ -81,14 +81,50 @@ else {
         $newuser->setUsername($_POST["username"]);
         $newuser->setEmail($_POST["email"]);
         $newuser->setPassword($password1md5);
-
+        $newuser->setVerificationcode(md5(uniqid(rand(),true)));
+        $newuser->setUsergroup("1");
         if (!$newuser->available()) {
             //Gebruikersnaam of emailadres wordt al gebruikt
             $smarty->assign('errors',"Deze gebruikersnaam of dit e-mailadres is al in gebruik.");
             $smarty->display('registration_failed.tpl');
         }
-        elseif ($newuser->save()) {
-            $smarty->display('registration_succesfull.tpl');
+        elseif ($newuser->save()) {            
+            $mail = new PHPMailer();
+            $mail->IsSMTP();
+            $mail->Host = $config->getSmtpHost();
+            $mail->SMTPAuth = true;
+            $mail->Username = $config->getSmtpLogin();
+            $mail->Password = $config->getSmtpPassword();
+            $mail->SMTPSecure = 'tls'; 
+            $mail->From = $config->getSmtpFrom();
+            $mail->FromName = $config->getSmtpFromName();
+            $mail->AddAddress($newuser->getEmail());
+            $mail->AddReplyTo($config->getSmtpFrom());
+            $mail->IsHTML(true);
+            $mail->Subject = 'Here is the subject';
+            $mail->Subject = 'Welkom op Zottebeatjes.be!';
+            $url = $config->getRootDirectory() . 'activate.php?uid=' . $newuser->getId() . '&key=' .$newuser->getVerificationcode();
+            $htmlbody = "Hey, ".$newuser->getUsername()."!<br /><br />";
+            $htmlbody.= "Welkom op Zottebeatjes.be, het muziekforum voor de allerzotste beatjes!<br />";
+            $htmlbody.= "Om je registratie te vervolledigen moet je je e-mailadres nog verifi&#235;ren, dit doe je door op onderstaande link te klikken:<br />";
+            $htmlbody.= "<a href='".$url."'>".$url."</a><br /><br />";
+            $htmlbody.= "Alvast veel forumplezier!<br /><br />";
+            $htmlbody.= "~Het Zottebeatjes Team";
+            $plainbody = "Hey, ".$newuser->getUsername()."!\n\n";
+            $plainbody.= "Welkom op Zottebeatjes.be, het muziekforum voor de allerzotste beatjes!\n";
+            $plainbody.= "Om je registratie te vervolledigen moet je je e-mailadres nog verifiëren, dit doe je door op onderstaande link te klikken:\n";
+            $plainbody.= $url . "\n\n";
+            $plainbody.= "Alvast veel forumplezier!\n\n";
+            $plainbody.= "~Het Zottebeatjes Team";
+            $mail->Body    = $htmlbody;
+            $mail->AltBody = $plainbody;
+            
+            if(!$mail->Send()) {
+                //Emailsysteem faalt --> Gebruiker voordeel van twijfel geven en account activeren
+                $newuser->activate();
+                die($newuser->getId());
+             }
+             $smarty->display('registration_succesfull.tpl');
         }
         else {
             //Registratie mislukt

@@ -17,6 +17,7 @@ class Member {
     private $_lastlogin;
     private $_lastip;
     private $_usergroup;
+    private $_verificationcode;
     
     private $_db;
     
@@ -25,6 +26,7 @@ class Member {
         $this->_avatar = "";
         $this->_signature = "";
         $this->_posts = "0";
+        $this->_usergroup = "1";
     }
     
     public function getId() {
@@ -81,6 +83,12 @@ class Member {
     public function setUsergroup($usergroup) {
         $this->_usergroup = $usergroup;
     }
+    public function getVerificationcode() {
+        return $this->_verificationcode;
+    }
+    public function setVerificationcode($verificationcode) {
+        $this->_verificationcode = $verificationcode;
+    }
     
     //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
     public function available() {
@@ -125,6 +133,7 @@ class Member {
             $this->_lastlogin = $row['lastlogin'];
             $this->_lastip = $row['lastip'];
             $this->_usergroup = $row['usergroup'];
+            $this->_verificationcode = $row['verificationcode'];
             return true;
         }
         else {
@@ -153,7 +162,7 @@ class Member {
             return false;
         }
         else {
-            $qry = $this->_db->prepare("INSERT INTO users(username,email,password,avatar,posts,signature,registerdate,lastip,usergroup) VALUES (:username,:email,:password,:avatar,:posts,:signature,NOW(),:lastip,:usergroup);");
+            $qry = $this->_db->prepare("INSERT INTO users(username,email,password,avatar,posts,signature,registerdate,lastip,usergroup,verificationcode) VALUES (:username,:email,:password,:avatar,:posts,:signature,NOW(),:lastip,:usergroup,:verificationcode);");
             $data = array(
                 ':username' => $this->_username,
                 ':email' => $this->_email,
@@ -162,10 +171,12 @@ class Member {
                 ':posts' => $this->_posts,
                 ':signature' => $this->_signature,
                 ':lastip' => $_SERVER['REMOTE_ADDR'],
-                ':usergroup' => '1'            
+                ':usergroup' => $this->_usergroup,
+                ':verificationcode' => $this->_verificationcode
             );
             $qry->execute($data);
             if ($qry->rowCount() > '0') {
+                $this->_id = $this->_db->lastInsertId('id');
                 return true;
             }
             else {
@@ -174,6 +185,16 @@ class Member {
         }
     }
     
+    public function activate() {
+        $qry = $this->_db->prepare("UPDATE users SET usergroup=? WHERE id=?");
+        $qry->execute(array("2",$this->_id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     public function updateAvatar() {
         $qry = $this->_db->prepare("UPDATE users SET avatar=? WHERE id=?");
         $qry->execute(array($this->_avatar,$this->_id));
