@@ -22,30 +22,26 @@ $polls = $webpoll->getAllPolls();
 
 $dataArr = array();
         
-//Lus door alle Antwoorden
-foreach ($polls as $poll) {
-    $pollArr = array();
-    
+
+foreach ($polls as $poll) { //Lus door alle polls
+    $pollArr = array(); //Id met alle polls in opbouwen
     $pollArr['id'] = $poll->getId();
     $pollArr['question'] = $poll->getQuestion();
-    $pollArr['answers'] = array();
-    //$pollArr['votes'] = $poll->getVotes();
     
-    $answers = $poll->getAllAnswers();
     
-    foreach ($answers as $answer) {
+    $answers = $poll->getAllAnswers(); //Alle antwoorden op deze poll ophalen
+    $pollArr['answers'] = array(); //Array opbouwen van alle antwoorden van deze poll
+    foreach ($answers as $answer) { //Lus door alle antwoorden
         $answerArr = array();
         $answerArr['id'] = $answer->getId();
-        $answerArr['poll'] = $answer->getPoll();
         $answerArr['content'] = $answer->getContent();
-        //$answerArr['votes'] = $answer->getVotes();
-
         array_push($pollArr['answers'],$answerArr);
     }
     array_push($dataArr,$pollArr);
 }
 
-$smarty->assign('answers',$dataArr);
+
+$smarty->assign('polls',$dataArr);
 $smarty->display('poll.tpl');
 
 echo PHP_EOL;

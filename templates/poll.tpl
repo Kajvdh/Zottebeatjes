@@ -1,9 +1,10 @@
-{foreach from=$polls item=poll}
-    <hr />
-    <center><b><a href="?={$poll['id']}">{$poll['content']}</a></b></center>
-    {foreach from=$answers item=answer}
-                <li><a href="?={ $answer['id']}">{$answer['content']}</a></b></br>
-    {/foreach}
-{/foreach}
+
              
-        
+{foreach from=$polls item=poll}
+    <h2>{$poll['question']}</h2>
+    <ul>
+    {foreach from=$poll['answers'] item=answer}
+        <li><a href="?pid={$poll['id']}&aid={$answer['id']}">{$answer['content']}</a></li>
+    {/foreach}
+    </ul>
+{/foreach}
