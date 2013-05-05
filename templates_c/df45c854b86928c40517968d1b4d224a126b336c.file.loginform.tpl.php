@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:25:56
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:28:23
          compiled from "templates\loginform.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:27235516ffffc477ea6-21101721%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'df45c854b86928c40517968d1b4d224a126b336c' => 
     array (
       0 => 'templates\\loginform.tpl',
-      1 => 1367717155,
+      1 => 1367717301,
       2 => 'file',
     ),
   ),
@@ -33,7 +33,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
             },
             messages: {
                 username: "Gelieve een gebruikersnaam in te vullen.",
-                password1: "Gelieve een wachtwoord in te vullen."
+                password: "Gelieve een wachtwoord in te vullen."
             }
 
         });
@@ -46,7 +46,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <form name="login" id="loginform" method="post" action="login.php" >
     <fieldset>
         <legend>Inloggen</legend>
-        <input type="hidden" name="loginform" value="true" />
+        <input type="hidden" id="loginform" name="loginform" value="true" />
 
         <label for="username">Gebruikersnaam:</label>
         <input type="text" id="username" name="username" id="username" />
