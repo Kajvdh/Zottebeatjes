@@ -62,7 +62,7 @@
     }  
 </script>
 
-<form name="register" id="regform" method="post" action="register.php"  >
+<form name="register" id="regform" method="post" action="register.php" onSubmit="return validateCaptcha()" >
     <fieldset>
         <legend>Registreren</legend>
         <input type="hidden" name="regform" value="true" />
