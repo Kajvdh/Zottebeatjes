@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-02 20:21:42
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:25:47
          compiled from "templates\header.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:21842516ffd63ded1b6-84947669%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '20a5b87bf1d249a8e4b5bdf6dc560aa9c65c681a' => 
     array (
       0 => 'templates\\header.tpl',
-      1 => 1367518900,
+      1 => 1367717145,
       2 => 'file',
     ),
   ),
@@ -29,6 +29,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Zottebeatjes</title>
         <script src="js/jquery/jquery-1.9.1.js"></script>
+        <script src="js/jquery/jquery.validate.js"></script>
         <script src="js/jquery/jquery.marquee.js"></script>
         <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
         <script>

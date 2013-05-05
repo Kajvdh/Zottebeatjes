@@ -4,6 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Zottebeatjes</title>
         <script src="js/jquery/jquery-1.9.1.js"></script>
+        <script src="js/jquery/jquery.validate.js"></script>
         <script src="js/jquery/jquery.marquee.js"></script>
         <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
         <script>

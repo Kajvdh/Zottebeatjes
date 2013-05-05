@@ -4,6 +4,7 @@ require_once 'classes/Config.php';
 require_once 'classes/Database.php';
 require_once 'classes/Login.php';
 require_once 'classes/Member.php';
+require_once 'classes/Usergroup.php';
 require_once 'classes/Database.php';
 
 require_once 'classes/Board.php';

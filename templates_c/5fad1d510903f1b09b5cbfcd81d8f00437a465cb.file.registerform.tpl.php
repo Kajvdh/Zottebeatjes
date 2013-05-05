@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:12:59
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:26:10
          compiled from "templates\registerform.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:17464517000251bf713-67919233%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5fad1d510903f1b09b5cbfcd81d8f00437a465cb' => 
     array (
       0 => 'templates\\registerform.tpl',
-      1 => 1367716372,
+      1 => 1367717169,
       2 => 'file',
     ),
   ),
@@ -23,9 +23,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_51700025255b20_35577761')) {function content_51700025255b20_35577761($_smarty_tpl) {?><script src="js/jquery/jquery-1.9.1.js"></script>
-<script src="js/jquery/jquery.validate.js"></script>
-<script>
+<?php if ($_valid && !is_callable('content_51700025255b20_35577761')) {function content_51700025255b20_35577761($_smarty_tpl) {?><script>
     $(document).ready(function() {
         $("#regform").validate({
             rules: {

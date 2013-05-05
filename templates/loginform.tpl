@@ -1,5 +1,4 @@
-<script src="js/jquery/jquery-1.9.1.js"></script>
-<script src="js/jquery/jquery.validate.js"></script>
+
 <script>
     $(document).ready(function() {
         $("#loginform").validate({
