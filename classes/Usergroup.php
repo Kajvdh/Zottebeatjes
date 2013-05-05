@@ -81,7 +81,7 @@ class Usergroup {
     
     //Gebruikersgroepsgegevens ophalen uit de database op basis van id
     public function getById($id) {
-        $stmp = $this->_db->prepare("SELECT * FROM `users` WHERE `id` = ?;");
+        $stmp = $this->_db->prepare("SELECT * FROM `usergroups` WHERE `id` = ?;");
         $stmp->execute(array($id));
         if ($stmp->rowCount() == "1") {
             $row = $stmp->fetch(PDO::FETCH_ASSOC);
