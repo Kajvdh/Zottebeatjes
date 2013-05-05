@@ -90,7 +90,7 @@ class Member {
         $this->_verificationcode = $verificationcode;
     }
     public function getPermissions() {
-        $usergroup = new Usergroup();
+        $usergroup = new Usergroup($this->_db);
         $usergroup->getById($this->_id);
         return $usergroup;
     }
