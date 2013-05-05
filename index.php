@@ -28,10 +28,11 @@ foreach ($polls as $poll) {
     
     $pollArr['id'] = $poll->getId();
     $pollArr['question'] = $poll->getQuestion();
+    $pollArr['answers'] = array();
     //$pollArr['votes'] = $poll->getVotes();
     
     $answers = $poll->getAllAnswers();
-
+    
     foreach ($answers as $answer) {
         $answerArr = array();
         $answerArr['id'] = $answer->getId();

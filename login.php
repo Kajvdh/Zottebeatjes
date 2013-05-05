@@ -44,7 +44,6 @@ elseif (isset($_POST['loginform'])) {
         }
         else {
             $member->getById($memberId);
-            
             if ($member->getPermissions()->canLogin()) {
                 //Gebruiker mag inloggen
                 $member->setLastloginNow();
@@ -53,7 +52,7 @@ elseif (isset($_POST['loginform'])) {
                 header("location:index.php");
             }
             else {
-                $smarty->assign('errors',array("Je account is niet geactiveerd."));
+                $smarty->assign('errors',array("Je account is verbannen."));
                 $smarty->display('error.tpl');
             }
         }
