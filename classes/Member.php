@@ -83,6 +83,11 @@ class Member {
     public function setUsergroup($usergroup) {
         $this->_usergroup = $usergroup;
     }
+    public function isGuest($isguest) {
+        if ($isguest) {
+            $this->_usergroup = "5";
+        }
+    }
     public function getVerificationcode() {
         return $this->_verificationcode;
     }
