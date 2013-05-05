@@ -12,7 +12,8 @@ require_once 'classes/Forum.php';
 require_once 'classes/Topic.php';
 require_once 'classes/Post.php';
 require_once 'classes/WebPoll.php';
-require_once 'classes/Usergroup.php';
+require_once 'classes/Poll.php';
+require_once 'classes/Answer.php';
 
 require 'lib/PHPMailer/class.phpmailer.php';
 
