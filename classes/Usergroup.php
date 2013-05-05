@@ -100,7 +100,7 @@ class Usergroup {
             $this->_can_poll_post = $row['can_poll_post'];
             $this->_can_poll_vote = $row['can_poll_vote'];
             $this->_can_set_avatar = $row['can_set_avatar'];
-            $this->_can_set_signature = $row['cen_set_signature'];
+            $this->_can_set_signature = $row['can_set_signature'];
             return true;
         }
         else {
