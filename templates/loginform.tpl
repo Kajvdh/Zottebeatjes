@@ -12,7 +12,7 @@
             },
             messages: {
                 username: "Gelieve een gebruikersnaam in te vullen.",
-                password1: "Gelieve een wachtwoord in te vullen."
+                password: "Gelieve een wachtwoord in te vullen."
             }
 
         });
@@ -25,7 +25,7 @@
 <form name="login" id="loginform" method="post" action="login.php" >
     <fieldset>
         <legend>Inloggen</legend>
-        <input type="hidden" name="loginform" value="true" />
+        <input type="hidden" id="loginform" name="loginform" value="true" />
 
         <label for="username">Gebruikersnaam:</label>
         <input type="text" id="username" name="username" id="username" />
