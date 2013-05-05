@@ -25,7 +25,7 @@ elseif (isset($_POST['loginform'])) {
      * @todo: Asynchrone verificatie via AJAX
      */
     if (!(($_POST['username']) && ($_POST['password']))) {
-        $smarty->assign('error',array("Je hebt niet alle benodigde informatie ingevuld"));
+        $smarty->assign('errors',array("Je hebt niet alle benodigde informatie ingevuld"));
         $smarty->display('error.tpl');
     }
     else {
@@ -39,7 +39,7 @@ elseif (isset($_POST['loginform'])) {
         $memberId = $member->verify();
 
         if ($memberId == false) {
-            $smarty->assign('error',array("De opgegeven gegevens zijn onjuist."));
+            $smarty->assign('errors',array("De opgegeven gegevens zijn onjuist."));
             $smarty->display('error.tpl');
         }
         else {
@@ -53,7 +53,7 @@ elseif (isset($_POST['loginform'])) {
                 header("location:index.php");
             }
             else {
-                $smarty->assign('error',array("Je account is niet geactiveerd."));
+                $smarty->assign('errors',array("Je account is niet geactiveerd."));
                 $smarty->display('error.tpl');
             }
         }
