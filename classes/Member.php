@@ -89,6 +89,11 @@ class Member {
     public function setVerificationcode($verificationcode) {
         $this->_verificationcode = $verificationcode;
     }
+    public function getPermissions() {
+        $usergroup = new Usergroup();
+        $usergroup->getById($this->_id);
+        return $usergroup;
+    }
     
     //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
     public function available() {

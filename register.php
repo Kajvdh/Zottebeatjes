@@ -52,15 +52,16 @@ else {
     }
     else {
         //reCAPTCHA controle
-        $Config = new Config();
-        $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
-            $_SERVER["REMOTE_ADDR"],
-            $_POST["recaptcha_challenge_field"],
-            $_POST["recaptcha_response_field"]);
-
-        if (!$captcha->is_valid) {
-            array_push($errorArr,"De CAPTCHA is niet juist ingevuld.");
-        }
+        //UPDATE: Gebeurt nu clientside via AJAX voor submit
+//        $Config = new Config();
+//        $captcha = recaptcha_check_answer ($Config->getCaptchaPrivateKey(),
+//            $_SERVER["REMOTE_ADDR"],
+//            $_POST["recaptcha_challenge_field"],
+//            $_POST["recaptcha_response_field"]);
+//
+//        if (!$captcha->is_valid) {
+//            array_push($errorArr,"De CAPTCHA is niet juist ingevuld.");
+//        }
     }
 
 

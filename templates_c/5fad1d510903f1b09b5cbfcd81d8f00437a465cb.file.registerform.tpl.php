@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-04-18 16:16:05
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-05 03:12:59
          compiled from "templates\registerform.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:17464517000251bf713-67919233%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '5fad1d510903f1b09b5cbfcd81d8f00437a465cb' => 
     array (
       0 => 'templates\\registerform.tpl',
-      1 => 1366095171,
+      1 => 1367716372,
       2 => 'file',
     ),
   ),
@@ -15,13 +15,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.13',
+  'unifunc' => 'content_51700025255b20_35577761',
   'variables' => 
   array (
     'recaptcha' => 1,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.13',
-  'unifunc' => 'content_51700025255b20_35577761',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_51700025255b20_35577761')) {function content_51700025255b20_35577761($_smarty_tpl) {?><script src="js/jquery/jquery-1.9.1.js"></script>
 <script src="js/jquery/jquery.validate.js"></script>
@@ -66,9 +66,30 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
         });
     });
+
+    function validateCaptcha() {
+        challengeField = $("input#recaptcha_challenge_field").val();
+        responseField = $("input#recaptcha_response_field").val();
+        var html = $.ajax({
+            type: "POST",
+            url: "ajax/validaterecaptcha.php",
+            data: "recaptcha_challenge_field=" + challengeField + "&recaptcha_response_field=" + responseField,
+            async: false
+        }).responseText;
+
+        if(html == "success") {
+            $("#captchaStatus").html(" ");
+            return true;
+        }
+        else {
+            $("#captchaStatus").html("Je hebt de CAPTCHA niet juist ingevuld.");
+            Recaptcha.reload();
+            return false;
+        }
+    }  
 </script>
 
-<form name="register" id="regform" method="post" action="register.php" >
+<form name="register" id="regform" method="post" action="register.php"  >
     <fieldset>
         <legend>Registreren</legend>
         <input type="hidden" name="regform" value="true" />
@@ -84,13 +105,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <br />
         <label for="password2">Wachtwoord (nogmaals):</label>
         <input type="password" id="password2" name="password2" id="password2" />
-        <br />
+        <br /><br />
         
         
             <?php echo $_smarty_tpl->tpl_vars['recaptcha']->value;?>
 
         
         
+        <br />
         <input id="submitbutton" type="submit" value="Registreer!" />
     </fieldset>
 </form><?php }} ?>

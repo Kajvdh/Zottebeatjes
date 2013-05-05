@@ -41,9 +41,30 @@
 
         });
     });
+
+    function validateCaptcha() {
+        challengeField = $("input#recaptcha_challenge_field").val();
+        responseField = $("input#recaptcha_response_field").val();
+        var html = $.ajax({
+            type: "POST",
+            url: "ajax/validaterecaptcha.php",
+            data: "recaptcha_challenge_field=" + challengeField + "&recaptcha_response_field=" + responseField,
+            async: false
+        }).responseText;
+
+        if(html == "success") {
+            $("#captchaStatus").html(" ");
+            return true;
+        }
+        else {
+            $("#captchaStatus").html("Je hebt de CAPTCHA niet juist ingevuld.");
+            Recaptcha.reload();
+            return false;
+        }
+    }  
 </script>
 
-<form name="register" id="regform" method="post" action="register.php" >
+<form name="register" id="regform" method="post" action="register.php"  >
     <fieldset>
         <legend>Registreren</legend>
         <input type="hidden" name="regform" value="true" />
@@ -59,12 +80,13 @@
         <br />
         <label for="password2">Wachtwoord (nogmaals):</label>
         <input type="password" id="password2" name="password2" id="password2" />
-        <br />
+        <br /><br />
         
         {nocache}
             {$recaptcha}
         {/nocache}
         
+        <br />
         <input id="submitbutton" type="submit" value="Registreer!" />
     </fieldset>
 </form>
