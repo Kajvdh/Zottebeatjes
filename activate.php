@@ -3,10 +3,6 @@ session_start();
 include 'includes.php';
 require_once 'lib/recaptchalib.php';
 $login = new Login();
-if ($login->getSession()) {
-    // ingelogd
-    header("location:index.php");
-}
 $database = new Database();
 $db = $database->getConnection();
 
