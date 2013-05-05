@@ -91,7 +91,7 @@ class Member {
     }
     public function getPermissions() {
         $usergroup = new Usergroup($this->_db);
-        $usergroup->getById($this->_id);
+        $usergroup->getById($this->_usergroup);
         return $usergroup;
     }
     
