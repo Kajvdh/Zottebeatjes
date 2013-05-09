@@ -18,11 +18,9 @@ if (isset($_POST['categories'])) {
 
 
 if (isset($_POST['forums'])) {
-    $categories = json_decode($_POST['forums'],true);
+    $categories = json_decode(stripslashes($_POST['forums']),true);
     foreach($categories as $category) {
         $categoryId = $category['id'];
-        echo $categoryId."<br />".PHP_EOL;
-
         $order = 1;
         foreach ($category['forums'] as $f) {
             $forum = new Forum($db);
