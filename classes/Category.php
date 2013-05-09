@@ -15,6 +15,7 @@ class Category {
     
     public $id;
     public $categoryname;
+    public $order;
     
     private $_forums;
     
@@ -30,9 +31,30 @@ class Category {
     public function getCategoryname() {
         return $this->categoryname;
     }
+    public function setCategoryname($categoryname) {
+        $this->categoryname = $categoryname;
+    }
+    
+    public function getOrder() {
+        return $this->order;
+    }
+    public function setOrder($order) {
+        $this->order = $order;
+    }
+    
+    public function update() {
+        $qry = $this->_db->prepare("UPDATE categories SET categoryname=?,`order`=? WHERE id=?");
+        $qry->execute(array($this->categoryname,$this->order,$this->id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     
     public function getAllForums() {
-        $stmt = $this->_db->prepare("SELECT `id` FROM `forums` WHERE `category`= ?;");
+        $stmt = $this->_db->prepare("SELECT `id` FROM `forums` WHERE `category`= ? ORDER BY `order`;");
         $stmt->execute(array($this->id));
         
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -57,6 +79,7 @@ class Category {
             $row = $stmp->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
             $this->categoryname = $row['categoryname'];
+            $this->order = $row['order'];
             return true;
         }
         else {

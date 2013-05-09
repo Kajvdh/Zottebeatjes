@@ -6,6 +6,16 @@
         <script src="js/jquery/jquery-1.9.1.js"></script>
         <script src="js/jquery/jquery.validate.js"></script>
         <script src="js/jquery/jquery.marquee.js"></script>
+        
+        <script src="js/jqueryui/ui/jquery.ui.core.js"></script>
+	<script src="js/jqueryui/ui/jquery.ui.widget.js"></script>
+	<script src="js/jqueryui/ui/jquery.ui.mouse.js"></script>
+	<script src="js/jqueryui/ui/jquery.ui.sortable.js"></script>
+	<script src="js/jqueryui/ui/jquery.ui.droppable.js"></script>
+	<script src="js/jqueryui/ui/jquery.ui.tabs.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.button.js"></script>
+        
+        <link rel="stylesheet" href="js/jqueryui/themes/base/jquery.ui.all.css">
         <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
         <script>
             var streaminfo;
@@ -96,6 +106,7 @@
         <param name="scale" value="noscale" />
         <embed src="http://www.museter.com/ffmp3-config.swf" flashvars="url=http://sunbow.be:8080/;&lang=nl&codec=mp3&volume=65&introurl=&autoplay=false&traking=true&jsevents=false&buffering=5&skin=http://www.museter.com/skins/eastanbul/ffmp3-eastanbul.xml&title=Zottebeatjes&welcome=Welkom" width="467" scale="noscale" height="26" wmode="transparent" allowscriptaccess="always" type="application/x-shockwave-flash" />
         </object>
+        <a href="listen.asx" target="_blank"><img src="images/wmp.png" alt="Windows Media Player" /></a><a href="listen.pls" target="_blank"><img src="images/itunes.png" alt="iTunes" /></a><a href="listen.asx" target="_blank"><img src="images/winamp.png" alt="Winamp" /></a><a href="listen.ram" target="_blank"><img src="images/rplayer.png" alt="Realplayer" /></a>
     </div>
     <div id="streaminfobar">
         <marquee behavior="scroll" scrollamount="2" direction="left" ><div id="streaminfo">Welkom op Zottebeatjes.be!</div></marquee>

@@ -17,6 +17,7 @@ class Forum {
     public $id;
     public $category;
     public $forumname;
+    public $order;
     
     public function __construct(PDO $db) {
         $this->_db = $db;
@@ -30,9 +31,30 @@ class Forum {
     public function getForumName() {
         return $this->forumname;
     }
-    
+    public function setForumName($forumname) {
+        $this->forumname = $forumname;
+    }
     public function getCategory() {
         return $this->category;
+    }
+    public function setCategory($category) {
+        $this->category = $category;
+    }
+    public function getOrder() {
+        return $this->order;
+    }
+    public function setOrder($order) {
+        $this->order = $order;
+    }
+    public function update() {
+        $qry = $this->_db->prepare("UPDATE forums SET category=?,forumname=?,`order`=? WHERE id=?");
+        $qry->execute(array($this->category,$this->forumname,$this->order,$this->id));
+        if ($qry->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     public function getAllTopics() {
@@ -61,6 +83,7 @@ class Forum {
             $this->id = $row['id'];
             $this->category = $row['category'];
             $this->forumname = $row['forumname'];
+            $this->order = $row['order'];
             return true;
         }
         else {

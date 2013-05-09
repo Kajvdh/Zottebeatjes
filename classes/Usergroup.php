@@ -22,6 +22,7 @@ class Usergroup {
     private $_can_poll_vote;        //Kan stemmen op een vote
     private $_can_set_avatar;       //Kan een avatar instellen
     private $_can_set_signature;    //Kan een onderschrift instellen
+    private $_is_admin;             //Is '1' als de gebruiker een administrator is
         
     private $_db;
     
@@ -77,6 +78,9 @@ class Usergroup {
     public function canSetSignature() {
         return $this->_can_set_signature;
     }
+    public function isAdmin() {
+        return $this->_is_admin;
+    }
    
     
     //Gebruikersgroepsgegevens ophalen uit de database op basis van id
@@ -101,6 +105,7 @@ class Usergroup {
             $this->_can_poll_vote = $row['can_poll_vote'];
             $this->_can_set_avatar = $row['can_set_avatar'];
             $this->_can_set_signature = $row['can_set_signature'];
+            $this->_is_admin = $row['is_admin'];
             return true;
         }
         else {

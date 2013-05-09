@@ -20,7 +20,7 @@ class Board {
     }
     
     public function getAllCategories() {
-        $stmt = $this->_db->query("SELECT `id`FROM `categories`;");
+        $stmt = $this->_db->query("SELECT `id`FROM `categories` ORDER BY `order`;");
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->categoryIds = array();
         foreach($results as $i => $dataArr) {
