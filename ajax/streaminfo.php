@@ -7,7 +7,7 @@ $stream->readAllXmlData();
 
 $dataArr = array();
 
-$dataArr['online'] = $stream->isOnline();
+$dataArr['online'] = $stream->isOnline() * $stream->getStreamStatus();
 $dataArr['currentlisteners'] = $stream->getCurrentListeners();
 $dataArr['peaklisteners'] = $stream->getPeakListeners();
 $dataArr['songtitle'] = $stream->getSongTitle();

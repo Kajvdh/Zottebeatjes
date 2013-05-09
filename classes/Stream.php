@@ -63,7 +63,7 @@ class Stream {
     }
     
     public function isOnline() {
-        if (@simplexml_load_file($this->_url) === false) {
+        if ((@simplexml_load_file($this->_url) === false)) {
             return false;
         }
         else {
