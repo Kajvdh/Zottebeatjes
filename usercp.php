@@ -10,7 +10,10 @@ if ($login->getSession()) {
     $member->getById($login->getSession());
     $smarty->assign('login',$member->getUsername());
 }
-
+else {
+    $member = new Member($db);
+    $member->isGuest(true); //Memberobject als gast aanmaken
+}
 
 $smarty->display('header.tpl');
 echo PHP_EOL;
