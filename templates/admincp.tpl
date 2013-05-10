@@ -218,7 +218,7 @@ $(document).ready(function() {
         </ul>
     </div>
 {/foreach}   
-
+<button id="saveordering">Opslaan</button>
 </div>
 <br />
 
@@ -226,8 +226,8 @@ $(document).ready(function() {
 
 
 
-<button id="saveordering">Opslaan</button>
 
+<div id="rest">
 
 <h2>Nieuw forum/categorie toevoegen:</h2>
 
@@ -254,3 +254,4 @@ $(document).ready(function() {
 <input type="text" name="newname" id="newname"></input>
 <br />
 <button id="addnew">Toevoegen</button>
+</div>

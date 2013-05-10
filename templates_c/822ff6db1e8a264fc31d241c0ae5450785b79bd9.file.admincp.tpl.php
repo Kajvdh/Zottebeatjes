@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-10 03:00:12
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-10 11:48:17
          compiled from "templates\admincp.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:21298518ba1dc174156-42134564%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '822ff6db1e8a264fc31d241c0ae5450785b79bd9' => 
     array (
       0 => 'templates\\admincp.tpl',
-      1 => 1368147610,
+      1 => 1368179288,
       2 => 'file',
     ),
   ),
@@ -112,9 +112,6 @@ $(document).ready(function() {
             });
             
         });
-        
-        $("#trash-can").droppable();
-        
         $("select#new").on('change', function() {
         
             if (this.value == "Forum") {
@@ -267,7 +264,7 @@ $_smarty_tpl->tpl_vars['forum']->_loop = true;
         </ul>
     </div>
 <?php } ?>   
-
+<button id="saveordering">Opslaan</button>
 </div>
 <br />
 
@@ -275,15 +272,8 @@ $_smarty_tpl->tpl_vars['forum']->_loop = true;
 
 
 
-<button id="saveordering">Opslaan</button>
 
-
-<div id="trashcan" border="1">
-Bla bla bla
-
-
-</div>
-
+<div id="rest">
 
 <h2>Nieuw forum/categorie toevoegen:</h2>
 
@@ -315,4 +305,5 @@ $_smarty_tpl->tpl_vars['category']->_loop = true;
 <label for="newname">Titel:</label>
 <input type="text" name="newname" id="newname"></input>
 <br />
-<button id="addnew">Toevoegen</button><?php }} ?>
+<button id="addnew">Toevoegen</button>
+</div><?php }} ?>

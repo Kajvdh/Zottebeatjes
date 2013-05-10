@@ -16,7 +16,7 @@
         <script src="js/jqueryui/ui/jquery.ui.button.js"></script>
         <script src="js/jqueryui/ui/jquery.ui.selectmenu.js"></script>
         
-        <link rel="stylesheet" href="js/jqueryui/themes/base/jquery.ui.all.css">
+        <link rel="stylesheet" href="js/jqueryui/themes/sunny/jquery.ui.all.css">
         <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
         <script>
             var streaminfo;
