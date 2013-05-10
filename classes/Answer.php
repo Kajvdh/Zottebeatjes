@@ -18,6 +18,11 @@ class Answer {
     public $content;
     public $votes;
     
+    public $scale = 2;
+    public $totalVotes;
+    public $percent;
+    public $width;
+    
     public function __construct(PDO $db) {
     $this->_db = $db;
     }
@@ -74,6 +79,33 @@ class Answer {
                 return false;
             }
         }
+    }
+    
+    public function voteLinePercent($votes,$totalVotes) {
+        $votes = isset($votes) ? $votes : 0;
+        $totalVotes = isset($totalVotes) ? $totalVotes : 0;
+        if ($totalVotes > 0) {
+        $percent = round(($votes/$totalVotes)*100);
+        }
+        else
+        {
+            $percent = 0;
+        }
+        
+        return $this->percent;
+    }
+    
+    public function voteLineWidth($votes,$totalVotes) {
+        $votes = isset($votes) ? $votes : 0;
+        $totalVotes = isset($totalVotes) ? $totalVotes : 0;
+        if ($totalVotes > 0) {
+        $width = round(($votes/$totalVotes)*100) * $this->scale;
+        }
+        else {
+            $width = 0;
+        }
+      
+        return $this->width;
     }
     
     public function getById($id) {

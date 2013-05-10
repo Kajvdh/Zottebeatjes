@@ -17,7 +17,6 @@ class Poll {
     public $id;
     public $question;
     public $votes;
-    public $scale = 2;
     
     public function __construct(PDO $db) {
     $this->_db = $db;
@@ -65,7 +64,7 @@ class Poll {
             }
         }   
     }
-    
+     
     public function getAllAnswers() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `answers` WHERE `poll`= ? ORDER BY `id` ASC;");
         $stmt->execute(array($this->id));

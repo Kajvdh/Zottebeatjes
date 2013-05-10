@@ -13,6 +13,10 @@ if ($login->getSession()) {
         $smarty->assign('isadmin',true);
     }
 }
+else {
+    $member = new Member($db);
+    $member->isGuest(true); //Memberobject als gast aanmaken
+}
 
 
 $smarty->display('header.tpl');
@@ -30,7 +34,8 @@ foreach ($polls as $poll) { //Lus door alle polls
     $pollArr = array(); //Id met alle polls in opbouwen
     $pollArr['id'] = $poll->getId();
     $pollArr['question'] = $poll->getQuestion();
-    
+    $pollArr['votes'] = $poll->getVotes();
+    $pollArr['votes'] = isset($pollArr['votes']) ? $pollArr['votes'] : 0; //Mocht deze waarde null zijn -> 0
     
     $answers = $poll->getAllAnswers(); //Alle antwoorden op deze poll ophalen
     $pollArr['answers'] = array(); //Array opbouwen van alle antwoorden van deze poll
@@ -38,6 +43,9 @@ foreach ($polls as $poll) { //Lus door alle polls
         $answerArr = array();
         $answerArr['id'] = $answer->getId();
         $answerArr['content'] = $answer->getContent();
+        $answerArr['votes'] = $answer->getVotes();
+        $answerArr['percent'] = $answer->voteLinePercent($answerArr['votes'],$pollArr['votes']);
+        $answerArr['width'] = $answer->voteLineWidth($answerArr['votes'],$pollArr['votes']);
         array_push($pollArr['answers'],$answerArr);
     }
     array_push($dataArr,$pollArr);

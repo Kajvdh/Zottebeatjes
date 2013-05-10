@@ -76,6 +76,19 @@ class Vote {
         }
     }
     
+    public function delete($id) {
+        $this->id = $id;
+        $qry = $this->_db->prepare("Delete FROM 'votes' WHERE 'id'= ?;");
+        $qry->execute(array($this->id));
+    }
+    
+    public function voted($poll) {
+        $this->poll = $poll;
+        $qry = $this->_db->prepare("SELECT * FROM `votes` WHERE `poll`= ?;");
+        $qry->execute(array($this->poll));
+        
+    }
+    
     public function getById($id) {
         $this->id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `id`= ?;");

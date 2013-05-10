@@ -7,11 +7,12 @@
     <ul>
     {foreach from=$poll['answers'] item=answer}
         <li class='poll_results'>
-            <div class='result' style='width:40px;'>&nbsp;</div>
+            <div class='result' style='width:{$answer['width']}px;'>&nbsp;</div>{$answer['percent']}%
             <label>{$answer['content']}</label>
         </li>
     {/foreach}
     </ul>
+    <p> Het aantal stemmen voor deze poll is: {$poll['votes']}</p>
     </fieldset>
     </form> 
 {/foreach}
