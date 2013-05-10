@@ -14,6 +14,7 @@
 	<script src="js/jqueryui/ui/jquery.ui.droppable.js"></script>
 	<script src="js/jqueryui/ui/jquery.ui.tabs.js"></script>
         <script src="js/jqueryui/ui/jquery.ui.button.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.selectmenu.js"></script>
         
         <link rel="stylesheet" href="js/jqueryui/themes/base/jquery.ui.all.css">
         <link rel="stylesheet" type="text/css" href="css/stylesheet.css" />
@@ -122,6 +123,9 @@
     
     {if isset($login)}
         <a href="usercp.php"><img src="images/button_usercp.gif" alt="User CP" onmouseover="this.src='images/button_usercp_hover.gif'" onmouseout="this.src='images/button_usercp.gif'" /></a>
+        {if isset($isadmin)}
+            <a href="admincp.php"><img src="images/button_admincp.gif" alt="Admin CP" onmouseover="this.src='images/button_admincp_hover.gif'" onmouseout="this.src='images/button_admincp.gif'" /></a>
+        {/if}
         <a href="logout.php"><img src="images/button_loguit.jpg" alt="Log uit" onmouseover="this.src='images/button_loguit_hover.jpg'" onmouseout="this.src='images/button_loguit.jpg'" /></a>
         (ingelogd als {$login})
     {else}

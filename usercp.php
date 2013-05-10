@@ -9,6 +9,9 @@ $member = new Member($db);
 if ($login->getSession()) {
     $member->getById($login->getSession());
     $smarty->assign('login',$member->getUsername());
+    if ($member->getPermissions()->isAdmin()) {
+        $smarty->assign('isadmin',true);
+    }
 }
 else {
     $member = new Member($db);

@@ -42,6 +42,30 @@ class Category {
         $this->order = $order;
     }
     
+    
+    
+    public function save() {
+        $gid = $this->_db->prepare("SELECT MAX(`order`) FROM categories");
+        $gid->execute();
+        $this->order = $gid->fetchColumn() +1;
+        
+        $qry = $this->_db->prepare("INSERT INTO categories(categoryname,`order`) VALUES (:categoryname,:order);");
+        $data = array(
+            ':categoryname' => $this->categoryname,
+            ':order' => $this->order
+        );
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {
+            $this->id = $this->_db->lastInsertId('id');
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    
+    
     public function update() {
         $qry = $this->_db->prepare("UPDATE categories SET categoryname=?,`order`=? WHERE id=?");
         $qry->execute(array($this->categoryname,$this->order,$this->id));

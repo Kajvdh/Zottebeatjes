@@ -15,6 +15,9 @@ if ($login->getSession()) {
     $member = new Member($db);
     $member->getById($login->getSession());
     $smarty->assign('login',$member->getUsername());
+    if ($member->getPermissions()->isAdmin()) {
+        $smarty->assign('isadmin',true);
+    }
 }
 
 

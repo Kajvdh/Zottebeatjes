@@ -46,6 +46,31 @@ class Forum {
     public function setOrder($order) {
         $this->order = $order;
     }
+    
+    
+    public function save() {
+        $gid = $this->_db->prepare("SELECT MAX(`order`) FROM forums");
+        $gid->execute();
+        $this->order = $gid->fetchColumn() +1;
+        
+        $qry = $this->_db->prepare("INSERT INTO forums(forumname,category,`order`) VALUES (:forumname,:category,:order);");
+        $data = array(
+            ':forumname' => $this->forumname,
+            ':category' => $this->category,
+            ':order' => $this->order
+        );
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {
+            $this->id = $this->_db->lastInsertId('id');
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    
+    
     public function update() {
         $qry = $this->_db->prepare("UPDATE forums SET category=?,forumname=?,`order`=? WHERE id=?");
         $qry->execute(array($this->category,$this->forumname,$this->order,$this->id));

@@ -34,4 +34,29 @@ if (isset($_POST['forums'])) {
     }
 }
 
+if (isset($_POST['newforum'])) {
+    $fName = $_POST['newforum'][0];
+    $cId = $_POST['newforum'][1];
+    $category = new Category($db);
+    if ($category->getById($cId)) {
+        $forum = new Forum($db);
+        $forum->setCategory($cId);
+        $forum->setForumName($fName);
+        if ($forum->save()) {
+            echo $forum->getId();
+        }
+    }
+}
+
+if (isset($_POST['newcategory'])) {
+    $cName = $_POST['newcategory'][0];
+    $category = new Category($db);
+    $category->setCategoryname($cName);
+    if ($category->save()) {
+       echo $category->getId();
+    }
+}
+
+
+
 ?>
