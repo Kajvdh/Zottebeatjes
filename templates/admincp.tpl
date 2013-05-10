@@ -3,48 +3,26 @@
   </style>
 <script>
 $(document).ready(function() {
-        $( ".connectedSortable" ).sortable().disableSelection();
-        var $tabs = $( "#tabs" ).tabs();
-        $tabs.find("ul").sortable({
-            update : function(e, ui) {
-                var csv = "";
-                var categoryOrder = new Array();
-                $("#tabs > ul > li > a").each(function(i) {
-                    var cId = this.id.replace("a-","");
-                    categoryOrder.push(cId)
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: "ajax/updateboardorder.php",
-                    dataType: 'json',
-                    data: {
-                        "categories":categoryOrder
-                    },
+        function saveOrder() {
+            //Category order opslaan
+            var categoryOrder = new Array();
+            $("#tabs > ul > li > a").each(function(i) {
+                var cId = this.id.replace("a-","");
+                categoryOrder.push(cId)
+            });
+            $.ajax({
+                type: 'POST',
+                url: "ajax/updateboardorder.php",
+                dataType: 'json',
+                data: {
+                    "categories":categoryOrder
+                },
 
-                    success: function(data) {
-                    }
-                });
-            }
-        });
-        var $tab_items = $( "ul:first li", $tabs ).droppable({
-            accept: ".connectedSortable li",
-            hoverClass: "ui-state-hover",
-            drop: function( event, ui ) {
-                var $item = $( this );
-                var $list = $( $item.find( "a" ).attr( "href" ) )
-                .find( ".connectedSortable" );
-
-                ui.draggable.hide( "slow", function() {
-                    $tabs.tabs( "option", "active", $tab_items.index( $item ) );
-                $( this ).appendTo( $list ).show( "slow" );
-                });
-            }
-        });
-
-        
-        $( "#saveordering" ).button().click(function( event ) {
-            event.preventDefault();
+                success: function(data) {
+                }
+            });
             
+            //Forum order opslaan
             var data = document.getElementById('tabs');
             var categories = data.getElementsByTagName("div");
             var categoryArray = new Array();
@@ -83,6 +61,40 @@ $(document).ready(function() {
                 success: function(data) {
                 }
             });
+        }
+
+
+
+        $( ".connectedSortable" ).sortable().disableSelection();
+        var $tabs = $( "#tabs" ).tabs();
+        $tabs.find("ul").sortable({
+            stop : function(e, ui) {
+                setTimeout(function() {
+                    saveOrder();
+                }, 1000);
+            }
+                
+        });
+        var $tab_items = $( "ul:first li", $tabs ).droppable({
+            accept: ".connectedSortable li",
+            hoverClass: "ui-state-hover",
+            drop: function( event, ui ) {
+                var $item = $( this );
+                var $list = $( $item.find( "a" ).attr( "href" ) )
+                .find( ".connectedSortable" );
+
+                ui.draggable.hide( "slow", function() {
+                    $tabs.tabs( "option", "active", $tab_items.index( $item ) );
+                $( this ).appendTo( $list ).show( "slow" );
+                });
+            }
+        });
+
+        
+        $( "#saveordering" ).button().click(function( event ) {
+            event.preventDefault();
+            
+            saveOrder();
             
         });
         $("select#new").on('change', function() {
@@ -159,24 +171,10 @@ $(document).ready(function() {
             $( ".connectedSortable" ).sortable().disableSelection();
             var $tabs = $( "#tabs" ).tabs();
             $tabs.find("ul").sortable({
-                update : function(e, ui) {
-                    var csv = "";
-                    var categoryOrder = new Array();
-                    $("#tabs > ul > li > a").each(function(i) {
-                        var cId = this.id.replace("a-","");
-                        categoryOrder.push(cId)
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: "ajax/updateboardorder.php",
-                        dataType: 'json',
-                        data: {
-                            "categories":categoryOrder
-                        },
-
-                        success: function(data) {
-                        }
-                    });
+                stop : function(e, ui) {
+                    setTimeout(function() {
+                        saveOrder();
+                    }, 1000);
                 }
             });
             var $tab_items = $( "ul:first li", $tabs ).droppable({
@@ -218,7 +216,6 @@ $(document).ready(function() {
         </ul>
     </div>
 {/foreach}   
-<button id="saveordering">Opslaan</button>
 </div>
 <br />
 
