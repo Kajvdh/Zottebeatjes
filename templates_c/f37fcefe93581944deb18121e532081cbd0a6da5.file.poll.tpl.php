@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-12 11:03:25
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-12 11:11:00
          compiled from "templates\poll.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:32104518ba13def1880-20834182%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f37fcefe93581944deb18121e532081cbd0a6da5' => 
     array (
       0 => 'templates\\poll.tpl',
-      1 => 1368349175,
+      1 => 1368349846,
       2 => 'file',
     ),
   ),
@@ -36,6 +36,7 @@ $_smarty_tpl->tpl_vars['poll']->_loop = true;
     <h2><?php echo $_smarty_tpl->tpl_vars['poll']->value['question'];?>
 </h2>
     <fieldset>
+    <input type="hidden" name="newvote" value="1" />
     <input type="hidden" name="pollid" value="<?php echo $_smarty_tpl->tpl_vars['poll']->value['id'];?>
 " />
     <ul>

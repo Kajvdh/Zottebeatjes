@@ -17,9 +17,10 @@ else {
     $member = new Member($db);
     $member->isGuest(true); //Memberobject als gast aanmaken
 }
-print_r($_POST);
+
 $smarty->display('header.tpl');
 echo PHP_EOL;
+
 if (isset($_POST['newvote'])) {
     $errorArr = array();
     
@@ -43,12 +44,15 @@ if (isset($_POST['newvote'])) {
     }
     else {
          //De stem in de verschillende tabellen van de database wegschrijven
+        
         $poll = new Poll($db);
         $answer = new Answer($db);
         $vote = new Vote($db);
+        
         $author = $login->getSession();
 
         $poll->addVote($_POST['pollid']);
+        
         $answer->addVote($_POST['answerid'],$_POST['pollid']);
         $vote->setPoll($_POST['pollid']);
         $vote->setAnswer($_POST['answerid']);

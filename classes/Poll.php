@@ -73,7 +73,7 @@ class Poll {
             $this->id = $id;
             $qry = $this->_db->prepare("UPDATE polls SET votes = votes+1 WHERE id=:id;");
             $data = array(
-                ':id' => $this->id,);
+                ':id' => $this->id);
             $qry->execute($data);
         }
     }
@@ -86,7 +86,7 @@ class Poll {
             $this->id = $id;
             $qry = $this->_db->prepare("UPDATE polls SET votes = votes-1 WHERE id=:id;");
             $data = array(
-                ':id' => $this->id,);
+                ':id' => $this->id);
             $qry->execute($data);
         }
     }

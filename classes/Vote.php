@@ -18,7 +18,7 @@ class Vote {
     public $answer;
     public $member;
     
-    public function _construct(PDO $db) {
+    public function __construct(PDO $db) {
         $this->_db = $db;
     }
     
@@ -59,6 +59,7 @@ class Vote {
             return false;
         }
         else {
+            
             $qry = $this->_db->prepare("INSERT INTO votes(poll,answer,member) VALUES(:poll,:answer,:member);");
             $data = array(
                 ':poll' => $this->poll,
