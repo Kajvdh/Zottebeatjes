@@ -64,6 +64,32 @@ class Poll {
             }
         }   
     }
+    
+    public function addVote($id) {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $this->id = $id;
+            $qry = $this->_db->prepare("UPDATE polls SET votes = votes+1 WHERE id=:id;");
+            $data = array(
+                ':id' => $this->id,);
+            $qry->execute($data);
+        }
+    }
+    
+    public function delVote($id) {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $this->id = $id;
+            $qry = $this->_db->prepare("UPDATE polls SET votes = votes-1 WHERE id=:id;");
+            $data = array(
+                ':id' => $this->id,);
+            $qry->execute($data);
+        }
+    }
      
     public function getAllAnswers() {
         $stmt = $this->_db->prepare("SELECT `id`FROM `answers` WHERE `poll`= ? ORDER BY `id` ASC;");

@@ -187,7 +187,9 @@ form.webpoll li {
         padding-left:2px;
 }
 
-
+label.poll_active {
+        width:90%;
+    }
 
 #footer {
     width:100%;

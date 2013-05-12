@@ -18,9 +18,9 @@ class Answer {
     public $content;
     public $votes;
     
-    public $scale = 2;
+    public $scale = 6;
     public $totalVotes;
-    public $percent;
+    public $percent = 100;
     public $width;
     
     public function __construct(PDO $db) {
@@ -81,6 +81,36 @@ class Answer {
         }
     }
     
+    public function addVote($id,$pollid) {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $this->id = $id;
+            $this->poll = $pollid;
+            $qry = $this->_db->prepare("UPDATE answers SET votes = votes+1 WHERE id=:id AND poll=:poll;");
+            $data = array(
+                ':id' => $this->id,
+                ':poll' => $this->poll,);
+            $qry->execute($data);
+        }
+    }
+    
+    public function delVote($id,$pollid) {
+        if (!$this->available()) {
+            return false;
+        }
+        else {
+            $this->id = $id;
+            $this->poll = $pollid;
+            $qry = $this->_db->prepare("UPDATE answers SET votes = votes+1 WHERE id=:id AND poll=:poll;");
+            $data = array(
+                ':id' => $this->id,
+                ':poll' => $this->poll,);
+            $qry->execute($data);
+        }
+    }
+    
     public function voteLinePercent($votes,$totalVotes) {
         $votes = isset($votes) ? $votes : 0;
         $totalVotes = isset($totalVotes) ? $totalVotes : 0;
@@ -92,7 +122,7 @@ class Answer {
             $percent = 0;
         }
         
-        return $this->percent;
+        return $percent;
     }
     
     public function voteLineWidth($votes,$totalVotes) {
@@ -102,10 +132,10 @@ class Answer {
         $width = round(($votes/$totalVotes)*100) * $this->scale;
         }
         else {
-            $width = 0;
+            $width = 1;
         }
       
-        return $this->width;
+        return $width;
     }
     
     public function getById($id) {

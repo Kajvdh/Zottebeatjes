@@ -76,10 +76,14 @@ class Vote {
         }
     }
     
-    public function delete($id) {
-        $this->id = $id;
-        $qry = $this->_db->prepare("Delete FROM 'votes' WHERE 'id'= ?;");
-        $qry->execute(array($this->id));
+    public function delete($poll,$member) {
+        $this->poll = $poll;
+        $this->member = $member;
+        $qry = $this->_db->prepare("Delete FROM 'votes' WHERE poll=:poll AND member=:member;");
+        $data = array(
+                ':poll' => $this->poll,
+                ':member' => $this->member,);
+            $qry->execute($data);
     }
     
     public function voted($poll) {
