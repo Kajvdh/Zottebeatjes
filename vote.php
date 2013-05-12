@@ -18,11 +18,14 @@ else {
     $member->isGuest(true); //Memberobject als gast aanmaken
 }
 print_r($_POST);
-die();
 $smarty->display('header.tpl');
 echo PHP_EOL;
 if (isset($_POST['newvote'])) {
     $errorArr = array();
+    
+    if (!$member->getPermissions()->canVote()) {
+        array_push($errorArr, "Je moet ingelogd zijn om te kunnen stemmen.");
+    }
 
     if ((!isset($_POST['pollid']))) {
         array_push($errorArr,"De poll waar je op probeert te stemmen bestaat niet.");

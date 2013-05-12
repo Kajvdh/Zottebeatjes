@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-12 10:59:26
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-12 11:03:25
          compiled from "templates\poll.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:32104518ba13def1880-20834182%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f37fcefe93581944deb18121e532081cbd0a6da5' => 
     array (
       0 => 'templates\\poll.tpl',
-      1 => 1368349164,
+      1 => 1368349175,
       2 => 'file',
     ),
   ),
@@ -60,12 +60,7 @@ px;'>&nbsp;<?php echo $_smarty_tpl->tpl_vars['answer']->value['percent'];?>
     <p> Het aantal stemmen voor deze poll is: <?php echo $_smarty_tpl->tpl_vars['poll']->value['votes'];?>
 </p>
     
-    <button type="submit" name="submit" value="">
-      <img src="images/button_stem.gif" alt="Stem" onmouseover="this.src='images/button_stem_hover.gif'" onmouseout="this.src='images/button_stem.gif'" />
-    </button>
-    
     <input type="image" src="images/button_stem.gif" alt="Stem" onmouseover="this.src='images/button_stem_hover.gif'" onmouseout="this.src='images/button_stem.gif'">
-    <a href="javascript:document.webpoll.submit()"><img src="images/button_stem.gif" alt="Stem" onmouseover="this.src='images/button_stem_hover.gif'" onmouseout="this.src='images/button_stem.gif'" /></a>
     </fieldset>
     </form> 
 <?php } ?><?php }} ?>
