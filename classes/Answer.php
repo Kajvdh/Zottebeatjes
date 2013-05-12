@@ -103,7 +103,7 @@ class Answer {
         else {
             $this->id = $id;
             $this->poll = $pollid;
-            $qry = $this->_db->prepare("UPDATE answers SET votes = votes+1 WHERE id=:id AND poll=:poll;");
+            $qry = $this->_db->prepare("UPDATE answers SET votes = votes-1 WHERE id=:id AND poll=:poll;");
             $data = array(
                 ':id' => $this->id,
                 ':poll' => $this->poll,);

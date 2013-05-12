@@ -26,6 +26,7 @@ $smarty->display('index.tpl');
 
 $webpoll = new WebPoll($db);
 $polls = $webpoll->getAllPolls();
+$voter = $login->getSession();
 
 $dataArr = array();
         
@@ -36,6 +37,8 @@ foreach ($polls as $poll) { //Lus door alle polls
     $pollArr['question'] = $poll->getQuestion();
     $pollArr['votes'] = $poll->getVotes();
     $pollArr['votes'] = isset($pollArr['votes']) ? $pollArr['votes'] : 0; //Mocht deze waarde null zijn -> 0
+    
+    $pollArr['voted'] = $poll->voted($pollArr['id'],$voter);
     
     $answers = $poll->getAllAnswers(); //Alle antwoorden op deze poll ophalen
     $pollArr['answers'] = array(); //Array opbouwen van alle antwoorden van deze poll

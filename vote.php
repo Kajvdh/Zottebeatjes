@@ -78,7 +78,7 @@ elseif (isset($_POST['removevote'])) {
         $smarty->display('error.tpl');
     }
     else {
-         //De stem in de verschillende tabellen van de database wegschrijven
+         //De stem in de verschillende tabellen van de database verwijderen
         $poll = new Poll($db);
         $answer = new Answer($db);
         $vote = new Vote($db);

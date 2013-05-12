@@ -77,21 +77,14 @@ class Vote {
         }
     }
     
-    public function delete($poll,$member) {
+    public function delete($poll,$voter) {
         $this->poll = $poll;
-        $this->member = $member;
-        $qry = $this->_db->prepare("Delete FROM 'votes' WHERE poll=:poll AND member=:member;");
+        $this->voter = $voter;
+        $qry = $this->_db->prepare("DELETE FROM 'votes' WHERE poll=:poll AND member=:member;");
         $data = array(
                 ':poll' => $this->poll,
-                ':member' => $this->member,);
-            $qry->execute($data);
-    }
-    
-    public function voted($poll) {
-        $this->poll = $poll;
-        $qry = $this->_db->prepare("SELECT * FROM `votes` WHERE `poll`= ?;");
-        $qry->execute(array($this->poll));
-        
+                ':member' => $this->voter,);
+        $qry->execute($data);
     }
     
     public function getById($id) {

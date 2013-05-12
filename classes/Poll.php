@@ -105,7 +105,22 @@ class Poll {
             }
         }
         return $this->_answers;
-        
+    }
+    
+    public function voted($poll,$voter) {
+        $this->poll = $poll;
+        $this->voter = $voter;
+        $qry = $this->_db->prepare("SELECT * FROM `votes` WHERE poll=:poll AND member=:member;");
+        $data = array(
+                ':poll' => $this->poll,
+                ':member' => $this->voter,);
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {   //Mogelijk niet bruikbaar met een select statement!
+            return false;
+        }
+        else {
+            return true;
+        } 
     }
     
     public function getById($id) {
