@@ -68,18 +68,6 @@
                 .mouseout(function() {
                     $(this).trigger('unpause');
                 })
-                //Uncomment onderstaande => message balk kan verschoven worden
-                //.mousemove(function (event) {
-                //    if ($(this).data('drag') == true) {
-                //        this.scrollLeft = $(this).data('scrollX') + ($(this).data('x') - event.clientX);
-                //    }
-                //})
-                //.mousedown(function (event) {
-                //    $(this).data('drag', true).data('x', event.clientX).data('scrollX', this.scrollLeft);
-                //})
-                //.mouseup(function () {
-                //    $(this).data('drag', false);
-                //});
             });
         </script>
         
@@ -119,7 +107,6 @@
     <div id="menubar">
     <a href="index.php"><img src="images/button_home.jpg" alt="Home" onmouseover="this.src='images/button_home_hover.jpg'" onmouseout="this.src='images/button_home.jpg'" /></a>
     <a href="board.php"><img src="images/button_board.jpg" alt="Board" onmouseover="this.src='images/button_board_hover.jpg'" onmouseout="this.src='images/button_board.jpg'" /></a>
-    <a href="chat.php"><img src="images/button_chat.gif" alt="Chat" onmouseover="this.src='images/button_chat_hover.gif'" onmouseout="this.src='images/button_chat.gif'" /></a>
     
     {if isset($login)}
         <a href="usercp.php"><img src="images/button_usercp.gif" alt="User CP" onmouseover="this.src='images/button_usercp_hover.gif'" onmouseout="this.src='images/button_usercp.gif'" /></a>
