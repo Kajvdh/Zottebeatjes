@@ -72,17 +72,25 @@ class Vote {
                 ':member' => $this->voter,);
         $qry->execute($data);
     }
+       
     
-    public function getByMemberAndPoll($member,$poll) {
-        $this->_member = $member;
-        $this->_poll = $poll;
-        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `member`= ? AND `poll` = ?;");
-        $stmp->execute(array($this->_member,$this->_poll));
-        $row = $stmp->fetch(PDO::FETCH_ASSOC);
-        
-        $this->_id = $row['id'];
-        $this->_answer = $row['answer'];
+    public function getByMemberAndPoll() {
+        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `poll`=:poll AND `member`=:member;");
+        $data = array(
+                ':poll' => $this->_poll,
+                ':member' => $this->_member);
+        $stmp->execute($data);
+        if ($stmp->rowCount() > '0') {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->_id = $row['id'];
+            $this->_answer = $row['answer'];
+            return true;
+        }
+        else {
+            return false;
+        } 
     }
+    
     public function getVotecountByAnswer() {
         $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `answer`= ?;");
         $stmp->execute(array($this->_answer));

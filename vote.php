@@ -25,7 +25,7 @@ if (isset($_POST['newvote'])) {
     $errorArr = array();
     
     if (!$member->getPermissions()->canVote()) {
-        array_push($errorArr, "Je moet ingelogd zijn om te kunnen stemmen.");
+        array_push($errorArr, "Je hebt niet voldoende access om te kunnen stemmen.");
     }
 
     if ((!isset($_POST['pollid']))) {
@@ -42,21 +42,11 @@ if (isset($_POST['newvote'])) {
         $smarty->assign('errors',$errorArr);
         $smarty->display('error.tpl');
     }
-    else {
-         //De stem in de verschillende tabellen van de database wegschrijven
-        
-        //$poll = new Poll($db);
-        //$answer = new Answer($db);
+    else {;
         $vote = new Vote($db);
-        
-
-        //$poll->addVote($_POST['pollid']);
-        //$answer->addVote($_POST['answerid'],$_POST['pollid']);
-        
         $vote->setPoll($_POST['pollid']);
         $vote->setAnswer($_POST['answerid']);
         $vote->setMember($member->getId());
-        
         $vote->save();
         header("location:index.php");
     }
@@ -64,6 +54,9 @@ if (isset($_POST['newvote'])) {
 elseif (isset($_POST['removevote'])) {
     $errorArr = array();
 
+    if (!$member->getPermissions()->canVote()) {
+        array_push($errorArr, "Je hebt niet voldoende access om te kunnen stemmen.");
+    }
     if ((!isset($_POST['pollid']))) {
                 array_push($errorArr,"De poll waar je een stem van wilt verwijderen bestaat niet.");
     }
@@ -78,14 +71,7 @@ elseif (isset($_POST['removevote'])) {
         $smarty->display('error.tpl');
     }
     else {
-         //De stem in de verschillende tabellen van de database verwijderen
-        //$poll = new Poll($db);
-        //$answer = new Answer($db);
         $vote = new Vote($db);
-        //$author = $login->getSession();
-
-        //$poll->delVote($_POST['pollid']);
-        //$answer->delVote($_POST['answerid'],$_POST['pollid']);
         $vote->delete($_POST['pollid'],$member->getId());
         header("location:index.php");
     }

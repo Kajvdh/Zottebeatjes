@@ -16,7 +16,6 @@ class Poll {
       
     public $id;
     public $question;
-    public $votes;
     
     public function __construct(PDO $db) {
     $this->_db = $db;
@@ -35,9 +34,6 @@ class Poll {
         return $this->question;
     }
     
-    public function getVotes() {
-        return $this->votes;
-    }
     
     public function available() { //Niet zeker of dit nodig is
         return true;
@@ -48,10 +44,9 @@ class Poll {
             return false;
         }
         else {
-            $qry = $this->_db->prepare("INSERT INTO polls(question,votes) VALUES(:question,:votes);");
+            $qry = $this->_db->prepare("INSERT INTO polls(question) VALUES(:question);");
             $data = array(
-                ':question' => $this->question,
-                ':votes' => $this->votes
+                ':question' => $this->question
             );
             
             $qry->execute($data);
@@ -63,32 +58,6 @@ class Poll {
                 return false;
             }
         }   
-    }
-    
-    public function addVote($id) {
-        if (!$this->available()) {
-            return false;
-        }
-        else {
-            $this->id = $id;
-            $qry = $this->_db->prepare("UPDATE polls SET votes = votes+1 WHERE id=:id;");
-            $data = array(
-                ':id' => $this->id);
-            $qry->execute($data);
-        }
-    }
-    
-    public function delVote($id) {
-        if (!$this->available()) {
-            return false;
-        }
-        else {
-            $this->id = $id;
-            $qry = $this->_db->prepare("UPDATE polls SET votes = votes-1 WHERE id=:id;");
-            $data = array(
-                ':id' => $this->id);
-            $qry->execute($data);
-        }
     }
      
     public function getAllAnswers() {
@@ -107,21 +76,6 @@ class Poll {
         return $this->_answers;
     }
     
-    public function voted($poll,$voter) {
-        $this->poll = $poll;
-        $this->voter = $voter;
-        $qry = $this->_db->prepare("SELECT * FROM `votes` WHERE poll=:poll AND member=:member;");
-        $data = array(
-                ':poll' => $this->poll,
-                ':member' => $this->voter,);
-        $qry->execute($data);
-        if ($qry->rowCount() > '0') {
-            return false;
-        }
-        else {
-            return true;
-        } 
-    }
     
     public function getById($id) {
         $this->id = $id;

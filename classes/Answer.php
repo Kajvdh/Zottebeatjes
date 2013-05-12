@@ -51,60 +51,23 @@ class Answer {
     }
     
     
-    public function available() {
-        return true;
-    }
-    
     public function save() {
-        if (!$this->available()) {
-            return false;
+        $qry = $this->_db->prepare("INSERT INTO answers(poll,content) VALUES(:poll,:content);");
+        $data = array(
+            ':poll' => $this->poll,
+            ':content' => $this->content
+        );
+
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {
+            return true;
         }
         else {
-            $qry = $this->_db->prepare("INSERT INTO answers(poll,content,votes) VALUES(:poll,:content,:votes);");
-            $data = array(
-                ':poll' => $this->poll,
-                ':content' => $this->content
-            );
-            
-            $qry->execute($data);
-            if ($qry->rowCount() > '0') {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return false;
         }
     }
     
-    public function addVote($id,$pollid) {
-        if (!$this->available()) {
-            return false;
-        }
-        else {
-            $this->id = $id;
-            $this->poll = $pollid;
-            $qry = $this->_db->prepare("UPDATE answers SET votes = votes+1 WHERE id=:id AND poll=:poll;");
-            $data = array(
-                ':id' => $this->id,
-                ':poll' => $this->poll,);
-            $qry->execute($data);
-        }
-    }
     
-    public function delVote($id,$pollid) {
-        if (!$this->available()) {
-            return false;
-        }
-        else {
-            $this->id = $id;
-            $this->poll = $pollid;
-            $qry = $this->_db->prepare("UPDATE answers SET votes = votes-1 WHERE id=:id AND poll=:poll;");
-            $data = array(
-                ':id' => $this->id,
-                ':poll' => $this->poll,);
-            $qry->execute($data);
-        }
-    }
     
     public function voteLinePercent($votes,$totalVotes) {
         $votes = isset($votes) ? $votes : 0;

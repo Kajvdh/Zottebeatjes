@@ -26,25 +26,19 @@ $smarty->display('index.tpl');
 
 $webpoll = new WebPoll($db);
 $polls = $webpoll->getAllPolls();
-$voter = $login->getSession();
 
 $dataArr = array();
-        
-
 foreach ($polls as $poll) { //Lus door alle polls
-    $pollArr = array(); //Id met alle polls in opbouwen
+    $pollArr = array(); //Array met alle polls in opbouwen
     $pollArr['id'] = $poll->getId();
     $pollArr['question'] = $poll->getQuestion();
     
     $vote = new Vote($db);
     $vote->setPoll($poll->getId());
     $pollArr['votes'] = $vote->getVotecountByPoll();
-    //$pollArr['votes'] = $poll->getVotes();
-    //$pollArr['votes'] = isset($pollArr['votes']) ? $pollArr['votes'] : 0; //Mocht deze waarde null zijn -> 0
-    
-    $pollArr['voted'] = $poll->voted($pollArr['id'],$voter);
-    
-    
+    $vote->setMember($member->getId());
+    $pollArr['voted'] = $vote->getByMemberAndPoll();
+   
     $answers = $poll->getAllAnswers(); //Alle antwoorden op deze poll ophalen
     $pollArr['answers'] = array(); //Array opbouwen van alle antwoorden van deze poll
     foreach ($answers as $answer) { //Lus door alle antwoorden
@@ -55,9 +49,6 @@ foreach ($polls as $poll) { //Lus door alle polls
         
         $vote = new Vote($db);
         $vote->setAnswer($answer->getId());
-        
-        
-        
         $answerArr['votes'] = $vote->getVotecountByAnswer(); //Aantal stemmen op dit antwoord ophalen
         
         $answerArr['percent'] = $answer->voteLinePercent($answerArr['votes'],$pollArr['votes']);

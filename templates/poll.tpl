@@ -4,7 +4,7 @@
     <form name="webpoll" class="webpoll" method="post" action="vote.php">
     <h2>{$poll['question']}</h2>
     <fieldset>
-    {if $poll['voted'] == TRUE}
+    {if $poll['voted'] == FALSE}
     <input type="hidden" name="newvote" value="1" />
     <input type="hidden" name="pollid" value="{$poll['id']}" />
     <ul>
