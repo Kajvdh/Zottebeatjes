@@ -80,7 +80,7 @@ class Vote {
     public function delete($poll,$voter) {
         $this->poll = $poll;
         $this->voter = $voter;
-        $qry = $this->_db->prepare("DELETE FROM 'votes' WHERE poll=:poll AND member=:member;");
+        $qry = $this->_db->prepare("DELETE FROM `votes` WHERE poll=:poll AND member=:member;");
         $data = array(
                 ':poll' => $this->poll,
                 ':member' => $this->voter,);
