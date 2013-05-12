@@ -49,7 +49,6 @@
     <form name="webpoll" class="webpoll" method="post" action="vote.php">
     <h2>{$poll['question']}</h2>
     <fieldset>
-   
     <ul>
     {foreach from=$poll['answers'] item=answer}
         <li class='poll_results'>
@@ -61,5 +60,7 @@
     {/foreach}
     </ul>
     <p> Het aantal stemmen voor deze poll is: {$poll['votes']}</p>
+    </fieldset>
+    </form>
 {/foreach}
 {/if}
