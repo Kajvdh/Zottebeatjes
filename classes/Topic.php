@@ -16,7 +16,6 @@ class Topic {
     
     public $id;
     public $forum;
-    public $firstpost; //obsolete
     public $title;
     
     
@@ -97,7 +96,6 @@ class Topic {
             $row = $stmp->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
             $this->forum = $row['forum'];
-            $this->firstpost = $row['firstpost'];
             $this->title = $row['title'];
             return true;
         }
