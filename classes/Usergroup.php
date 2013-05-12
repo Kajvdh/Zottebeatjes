@@ -18,7 +18,6 @@ class Usergroup {
     private $_can_edit_ownreply;    //Kan eigen topics bewerken
     private $_can_edit_topic;       //Kan alle reacties van iedereen bewerken
     private $_can_edit_reply;       //Kan alle topics van iedereen bewerken
-    private $_can_poll_post;        //Kan een vote starten
     private $_can_poll_vote;        //Kan stemmen op een vote
     private $_can_set_avatar;       //Kan een avatar instellen
     private $_can_set_signature;    //Kan een onderschrift instellen
@@ -66,9 +65,6 @@ class Usergroup {
     public function canEditReply() {
         return $this->_can_edit_reply;
     }
-    public function canPostPoll() {
-        return $this->_can_poll_post;
-    }
     public function canVote() {
         return $this->_can_poll_vote;
     }
@@ -101,7 +97,6 @@ class Usergroup {
             $this->_can_edit_ownreply = $row['can_edit_ownreply'];
             $this->_can_edit_topic = $row['can_edit_topic'];
             $this->_can_edit_reply = $row['can_edit_reply'];
-            $this->_can_poll_post = $row['can_poll_post'];
             $this->_can_poll_vote = $row['can_poll_vote'];
             $this->_can_set_avatar = $row['can_set_avatar'];
             $this->_can_set_signature = $row['can_set_signature'];
