@@ -45,18 +45,18 @@ if (isset($_POST['newvote'])) {
     else {
          //De stem in de verschillende tabellen van de database wegschrijven
         
-        $poll = new Poll($db);
-        $answer = new Answer($db);
+        //$poll = new Poll($db);
+        //$answer = new Answer($db);
         $vote = new Vote($db);
         
-        $author = $login->getSession();
 
-        $poll->addVote($_POST['pollid']);
+        //$poll->addVote($_POST['pollid']);
+        //$answer->addVote($_POST['answerid'],$_POST['pollid']);
         
-        $answer->addVote($_POST['answerid'],$_POST['pollid']);
         $vote->setPoll($_POST['pollid']);
         $vote->setAnswer($_POST['answerid']);
-        $vote->setMember($author);
+        $vote->setMember($member->getId());
+        
         $vote->save();
         header("location:index.php");
     }
@@ -79,14 +79,14 @@ elseif (isset($_POST['removevote'])) {
     }
     else {
          //De stem in de verschillende tabellen van de database verwijderen
-        $poll = new Poll($db);
-        $answer = new Answer($db);
+        //$poll = new Poll($db);
+        //$answer = new Answer($db);
         $vote = new Vote($db);
-        $author = $login->getSession();
+        //$author = $login->getSession();
 
-        $poll->delVote($_POST['pollid']);
-        $answer->delVote($_POST['answerid'],$_POST['pollid']);
-        $vote->delete($_POST['pollid'],$author);
+        //$poll->delVote($_POST['pollid']);
+        //$answer->delVote($_POST['answerid'],$_POST['pollid']);
+        $vote->delete($_POST['pollid'],$member->getId());
         header("location:index.php");
     }
 }

@@ -115,7 +115,7 @@ class Poll {
                 ':poll' => $this->poll,
                 ':member' => $this->voter,);
         $qry->execute($data);
-        if ($qry->rowCount() > '0') {   //Mogelijk niet bruikbaar met een select statement!
+        if ($qry->rowCount() > '0') {
             return false;
         }
         else {
@@ -132,7 +132,6 @@ class Poll {
             $row = $stmp->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['id'];
             $this->question = $row['question'];
-            $this->votes = $row['votes'];
             return true;
         }
         else {

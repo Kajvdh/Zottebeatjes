@@ -18,7 +18,7 @@ require_once 'classes/Answer.php';
 require_once 'classes/Vote.php';
 
 require 'lib/PHPMailer/class.phpmailer.php';
-
+require 'lib/PHPMarkdownExtra1.2.7/markdown.php';
 require_once 'classes/Stream.php';
 
 require_once('smarty.php');

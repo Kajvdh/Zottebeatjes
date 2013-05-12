@@ -16,7 +16,6 @@ class Answer {
     public $id;
     public $poll;
     public $content;
-    public $votes;
     
     public $scale = 6;
     public $totalVotes;
@@ -51,9 +50,6 @@ class Answer {
         return $this->content;
     }
     
-    public function getVotes() {
-        return $this->votes;
-    }
     
     public function available() {
         return true;
@@ -67,8 +63,7 @@ class Answer {
             $qry = $this->_db->prepare("INSERT INTO answers(poll,content,votes) VALUES(:poll,:content,:votes);");
             $data = array(
                 ':poll' => $this->poll,
-                ':content' => $this->content,
-                ':votes' => $this->votes,
+                ':content' => $this->content
             );
             
             $qry->execute($data);
@@ -147,7 +142,6 @@ class Answer {
         $this->id = $row['id'];
         $this->poll = $row['poll'];
         $this->content = $row['content'];
-        $this->votes = $row['votes'];
     }
 }
 

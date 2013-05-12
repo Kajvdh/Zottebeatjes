@@ -13,90 +13,85 @@
 class Vote {
     private $_db;
     
-    public $id;
-    public $poll;
-    public $answer;
-    public $member;
+    public $_id;
+    private $_poll;
+    private $_answer;
+    private $_member;
     
     public function __construct(PDO $db) {
         $this->_db = $db;
     }
     
-    public function setPoll($pollId) {
-        $this->poll = $pollId;
-    }
-    
-    public function setAnswer($answerId) {
-        $this->answer = $answerId;
-    }
-    
-    public function setMember($memberId) {
-        $this->member = $memberId;
-    }
-    
     public function getId() {
-        return $this->poll;
+        return $this->_poll;
     }
-    
     public function getPoll() {
-        return $this->id;
+        return $this->_poll;
     }
-    
+    public function setPoll($pollId) {
+        $this->_poll = $pollId;
+    }
     public function getAnswer() {
-        return $this->answer;
+        return $this->_answer;
     }
-    
+    public function setAnswer($answerId) {
+        $this->_answer = $answerId;
+    }
     public function getMember() {
-        return $this->member;
+        return $this->_member;
+    }    
+    public function setMember($memberId) {
+        $this->_member = $memberId;
     }
     
-    public function available() {
-        return true;
-    }
     
-    public function save() {
-        if (!$this->available()) {
-            return false;
+    
+    public function save() {            
+        $qry = $this->_db->prepare("INSERT INTO votes(poll,answer,member) VALUES(:poll,:answer,:member);");
+        $data = array(
+            ':poll' => $this->_poll,
+            ':answer' => $this->_answer,
+            ':member' => $this->_member,
+        );
+
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {
+            return true;
         }
         else {
-            
-            $qry = $this->_db->prepare("INSERT INTO votes(poll,answer,member) VALUES(:poll,:answer,:member);");
-            $data = array(
-                ':poll' => $this->poll,
-                ':answer' => $this->answer,
-                ':member' => $this->member,
-            );
-            
-            $qry->execute($data);
-            if ($qry->rowCount() > '0') {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return false;
         }
     }
     
     public function delete($poll,$voter) {
-        $this->poll = $poll;
+        $this->_poll = $poll;
         $this->voter = $voter;
         $qry = $this->_db->prepare("DELETE FROM `votes` WHERE poll=:poll AND member=:member;");
         $data = array(
-                ':poll' => $this->poll,
+                ':poll' => $this->_poll,
                 ':member' => $this->voter,);
         $qry->execute($data);
     }
     
-    public function getById($id) {
-        $this->id = $id;
-        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `id`= ?;");
-        $stmp->execute(array($this->id));
+    public function getByMemberAndPoll($member,$poll) {
+        $this->_member = $member;
+        $this->_poll = $poll;
+        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `member`= ? AND `poll` = ?;");
+        $stmp->execute(array($this->_member,$this->_poll));
         $row = $stmp->fetch(PDO::FETCH_ASSOC);
         
-        $this->id = $row['id'];
-        $this->poll = $row['poll'];
-        $this->answer = $row['answer'];
-        $this->member = $row['member'];
+        $this->_id = $row['id'];
+        $this->_answer = $row['answer'];
+    }
+    public function getVotecountByAnswer() {
+        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `answer`= ?;");
+        $stmp->execute(array($this->_answer));
+        return $stmp->rowCount();
+    }
+    public function getVotecountByPoll() {
+        $stmp = $this->_db->prepare("SELECT * FROM `votes` WHERE `poll`= ?;");
+        $stmp->execute(array($this->_poll));
+        return $stmp->rowCount();
     }
 }
 

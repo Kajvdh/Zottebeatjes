@@ -85,7 +85,7 @@ if (isset($_GET['t'])) {
                     $postArr['author'] = "Onbekende gebruiker";
                 }
 
-                $postArr['content'] = $post->getContent();
+                $postArr['content'] = Markdown($post->getContent());
                 $postArr['postdate'] = $post->getPostdate();
                 array_push($dataArr,$postArr);
             }

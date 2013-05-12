@@ -35,18 +35,31 @@ foreach ($polls as $poll) { //Lus door alle polls
     $pollArr = array(); //Id met alle polls in opbouwen
     $pollArr['id'] = $poll->getId();
     $pollArr['question'] = $poll->getQuestion();
-    $pollArr['votes'] = $poll->getVotes();
-    $pollArr['votes'] = isset($pollArr['votes']) ? $pollArr['votes'] : 0; //Mocht deze waarde null zijn -> 0
+    
+    $vote = new Vote($db);
+    $vote->setPoll($poll->getId());
+    $pollArr['votes'] = $vote->getVotecountByPoll();
+    //$pollArr['votes'] = $poll->getVotes();
+    //$pollArr['votes'] = isset($pollArr['votes']) ? $pollArr['votes'] : 0; //Mocht deze waarde null zijn -> 0
     
     $pollArr['voted'] = $poll->voted($pollArr['id'],$voter);
+    
     
     $answers = $poll->getAllAnswers(); //Alle antwoorden op deze poll ophalen
     $pollArr['answers'] = array(); //Array opbouwen van alle antwoorden van deze poll
     foreach ($answers as $answer) { //Lus door alle antwoorden
-        $answerArr = array();
-        $answerArr['id'] = $answer->getId();
-        $answerArr['content'] = $answer->getContent();
-        $answerArr['votes'] = $answer->getVotes();
+        $answerArr = array(); //Array voor informatie antwoorden
+        
+        $answerArr['id'] = $answer->getId(); //Id van de antwoord
+        $answerArr['content'] = $answer->getContent(); //Inhoud antwoord
+        
+        $vote = new Vote($db);
+        $vote->setAnswer($answer->getId());
+        
+        
+        
+        $answerArr['votes'] = $vote->getVotecountByAnswer(); //Aantal stemmen op dit antwoord ophalen
+        
         $answerArr['percent'] = $answer->voteLinePercent($answerArr['votes'],$pollArr['votes']);
         $answerArr['width'] = $answer->voteLineWidth($answerArr['votes'],$pollArr['votes']);
         array_push($pollArr['answers'],$answerArr);
