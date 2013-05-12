@@ -1,7 +1,7 @@
 
              
 {foreach from=$polls item=poll} 
-    <form class="webpoll" method="post">
+    <form name="webpoll" class="webpoll" method="post" action="vote.php">
     <h2>{$poll['question']}</h2>
     <fieldset>
     <input type="hidden" name="pollid" value="{$poll['id']}" />
@@ -17,7 +17,8 @@
     {/foreach}
     </ul>
     <p> Het aantal stemmen voor deze poll is: {$poll['votes']}</p>
-    <a href="vote.php?newvote"><img src="images/button_stem.gif" alt="Stem" onmouseover="this.src='images/button_stem_hover.gif'" onmouseout="this.src='images/button_stem.gif'" /></a>
+    
+    <input type="image" src="images/button_stem.gif" alt="Stem" onmouseover="this.src='images/button_stem_hover.gif'" onmouseout="this.src='images/button_stem.gif'">
     </fieldset>
     </form> 
 {/foreach}

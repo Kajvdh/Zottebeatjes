@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.13, created on 2013-05-10 11:48:17
+<?php /* Smarty version Smarty-3.1.13, created on 2013-05-10 12:13:14
          compiled from "templates\admincp.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:21298518ba1dc174156-42134564%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '822ff6db1e8a264fc31d241c0ae5450785b79bd9' => 
     array (
       0 => 'templates\\admincp.tpl',
-      1 => 1368179288,
+      1 => 1368180789,
       2 => 'file',
     ),
   ),
@@ -30,48 +30,26 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   </style>
 <script>
 $(document).ready(function() {
-        $( ".connectedSortable" ).sortable().disableSelection();
-        var $tabs = $( "#tabs" ).tabs();
-        $tabs.find("ul").sortable({
-            update : function(e, ui) {
-                var csv = "";
-                var categoryOrder = new Array();
-                $("#tabs > ul > li > a").each(function(i) {
-                    var cId = this.id.replace("a-","");
-                    categoryOrder.push(cId)
-                });
-                $.ajax({
-                    type: 'POST',
-                    url: "ajax/updateboardorder.php",
-                    dataType: 'json',
-                    data: {
-                        "categories":categoryOrder
-                    },
+        function saveOrder() {
+            //Category order opslaan
+            var categoryOrder = new Array();
+            $("#tabs > ul > li > a").each(function(i) {
+                var cId = this.id.replace("a-","");
+                categoryOrder.push(cId)
+            });
+            $.ajax({
+                type: 'POST',
+                url: "ajax/updateboardorder.php",
+                dataType: 'json',
+                data: {
+                    "categories":categoryOrder
+                },
 
-                    success: function(data) {
-                    }
-                });
-            }
-        });
-        var $tab_items = $( "ul:first li", $tabs ).droppable({
-            accept: ".connectedSortable li",
-            hoverClass: "ui-state-hover",
-            drop: function( event, ui ) {
-                var $item = $( this );
-                var $list = $( $item.find( "a" ).attr( "href" ) )
-                .find( ".connectedSortable" );
-
-                ui.draggable.hide( "slow", function() {
-                    $tabs.tabs( "option", "active", $tab_items.index( $item ) );
-                $( this ).appendTo( $list ).show( "slow" );
-                });
-            }
-        });
-
-        
-        $( "#saveordering" ).button().click(function( event ) {
-            event.preventDefault();
+                success: function(data) {
+                }
+            });
             
+            //Forum order opslaan
             var data = document.getElementById('tabs');
             var categories = data.getElementsByTagName("div");
             var categoryArray = new Array();
@@ -110,6 +88,40 @@ $(document).ready(function() {
                 success: function(data) {
                 }
             });
+        }
+
+
+
+        $( ".connectedSortable" ).sortable().disableSelection();
+        var $tabs = $( "#tabs" ).tabs();
+        $tabs.find("ul").sortable({
+            stop : function(e, ui) {
+                setTimeout(function() {
+                    saveOrder();
+                }, 1000);
+            }
+                
+        });
+        var $tab_items = $( "ul:first li", $tabs ).droppable({
+            accept: ".connectedSortable li",
+            hoverClass: "ui-state-hover",
+            drop: function( event, ui ) {
+                var $item = $( this );
+                var $list = $( $item.find( "a" ).attr( "href" ) )
+                .find( ".connectedSortable" );
+
+                ui.draggable.hide( "slow", function() {
+                    $tabs.tabs( "option", "active", $tab_items.index( $item ) );
+                $( this ).appendTo( $list ).show( "slow" );
+                });
+            }
+        });
+
+        
+        $( "#saveordering" ).button().click(function( event ) {
+            event.preventDefault();
+            
+            saveOrder();
             
         });
         $("select#new").on('change', function() {
@@ -186,24 +198,10 @@ $(document).ready(function() {
             $( ".connectedSortable" ).sortable().disableSelection();
             var $tabs = $( "#tabs" ).tabs();
             $tabs.find("ul").sortable({
-                update : function(e, ui) {
-                    var csv = "";
-                    var categoryOrder = new Array();
-                    $("#tabs > ul > li > a").each(function(i) {
-                        var cId = this.id.replace("a-","");
-                        categoryOrder.push(cId)
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: "ajax/updateboardorder.php",
-                        dataType: 'json',
-                        data: {
-                            "categories":categoryOrder
-                        },
-
-                        success: function(data) {
-                        }
-                    });
+                stop : function(e, ui) {
+                    setTimeout(function() {
+                        saveOrder();
+                    }, 1000);
                 }
             });
             var $tab_items = $( "ul:first li", $tabs ).droppable({
@@ -264,7 +262,6 @@ $_smarty_tpl->tpl_vars['forum']->_loop = true;
         </ul>
     </div>
 <?php } ?>   
-<button id="saveordering">Opslaan</button>
 </div>
 <br />
 
