@@ -11,11 +11,11 @@
  */
 
 class Post {
-    public $_id;        //Uniek ID van de post
-    public $_author;    //ID van de het Member dat deze post geplaatst heeft
-    public $_postdate;  //Datum en tijd van wanneer de post geplaatst is
-    public $_topic;     //ID van het topic waar de post geplaatst is
-    public $_content;   //Inhoud van de post
+    private $_id;        //Uniek ID van de post
+    private $_author;    //ID van de het Member dat deze post geplaatst heeft
+    private $_postdate;  //Datum en tijd van wanneer de post geplaatst is
+    private $_topic;     //ID van het topic waar de post geplaatst is
+    private $_content;   //Inhoud van de post
     private $_db;       //PDO database object voor communicatie met de database
     
     /**
