@@ -1,26 +1,43 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Class: Database
+ * 
+ * Deze klasse zorgt voor het opzetten van de verbinnding met de MySQL server
+ *
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
 
-/**
- * Description of Database
- *
- * @author Kaj
- */
 class Database {
-    private $_db;
+    private $_db;   //PDO Database object van de verbinding met de database
+    
+    /**
+     * Default constructor
+     */
     public function __construct() {
         $this->createDbConnection();
     }
+    
+    /**
+     * PDO object ophalen
+     */
+    public function getConnection() {
+        return $this->_db;
+    }
+    
+    /**
+     * Connectie met de database opzetten
+     * @return boolean: `true` als de connectie is opgezet
+     */
     private function createDbConnection() {
         if ($this->_db) {
             return true;
         }
         else {
-            
+            /**
+             * Benodigde informatie van de MySQL server ophalen uit de Config klasse
+             */
             $config = new Config();
             $mysqlCredentials = $config->getMysqlCredentials();
             $host = $mysqlCredentials['host'];
@@ -34,15 +51,11 @@ class Database {
                 $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
             }
             catch(PDOException $ex) { 
-                //echo $ex->getMessage();
                 return false;
             }
             $this->_db = $db;
             return true;
         }
-    }
-    public function getConnection() {
-        return $this->_db;
     }
 }
 

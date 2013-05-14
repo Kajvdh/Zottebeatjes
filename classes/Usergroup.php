@@ -1,34 +1,46 @@
 <?php
 
 /**
- * Description of Usergroup
+ * Class: Usergroup
+ * 
+ * Bevat alle informatie van een gebruikersgroep.
+ * Deze klasse zorgt voor het uitlezen van de informatie van een bepaalde gebruikersgroep uit de database.
+ * Alle rechten die een gebruikersgroep heeft worden in deze klasse beschreven.
  *
- * @author Kaj
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
+
 class Usergroup {
-    private $_id;                   
-    private $_groupname;            
-    private $_can_login;            //Kan inloggen op het account
-    private $_can_view_board;       //Kan overzicht van de categoriëen en forums zien
-    private $_can_view_forum;       //Kan inhoud van een forum zien
-    private $_can_view_topic;       //Kan de posts in een topic bekijken
-    private $_can_post_topic;       //Kan een nieuw topic starten
-    private $_can_post_reply;       //Kan een reactie op een bestaand topic plaatsen
-    private $_can_edit_owntopic;    //Kan eigen reacties bewerken
-    private $_can_edit_ownreply;    //Kan eigen topics bewerken
-    private $_can_edit_topic;       //Kan alle reacties van iedereen bewerken
-    private $_can_edit_reply;       //Kan alle topics van iedereen bewerken
-    private $_can_poll_vote;        //Kan stemmen op een vote
-    private $_can_set_avatar;       //Kan een avatar instellen
-    private $_can_set_signature;    //Kan een onderschrift instellen
-    private $_is_admin;             //Is '1' als de gebruiker een administrator is
-        
-    private $_db;
+    private $_id;                   //Uniek ID      
+    private $_groupname;            //Groepsnaam van de gebruikersgroep
+    private $_can_login;            //Gebruikers kunnen inloggen
+    private $_can_view_board;       //Gebruikers kunnen overzicht van categoriëen en fora zien
+    private $_can_view_forum;       //Gebruikers kunnen de inhoud van een forum zien
+    private $_can_view_topic;       //Gebruikers kunnen de inhoud van een topic zien
+    private $_can_post_topic;       //Gebruikers kunnen een nieuw topic starten
+    private $_can_post_reply;       //Gebruikers kunnen een reactie op een topic plaatsen
+    private $_can_edit_owntopic;    //Gebruikers kunnen hun eigen topics bewerken
+    private $_can_edit_ownreply;    //Gebruikers kunnen hun eigen reacties aanpassen
+    private $_can_edit_topic;       //Gebruikers kunnen alle topics aanpassen
+    private $_can_edit_reply;       //Gebruikers kunnen alle reacties op topics aanpassen
+    private $_can_poll_vote;        //Gebruikers kunnen stemmen op een poll
+    private $_can_set_avatar;       //Gebruikers kunnen een avatar instellen
+    private $_can_set_signature;    //Gebruikers kunnen een signature instellen
+    private $_is_admin;             //Gebruikers zijn administrators
+    private $_db;                   //PDO Database object voor communicatie met de database
     
+    /**
+     * Default constructor
+     * @param PDO $db: PDO object dat gebruikt wordt om te verbinden op database
+     */
     public function __construct(PDO $db) {
         $this->_db = $db;
     }
-    
+    /**
+     * Getfuncties
+     * @return type: Geeft opgevraagde informatie terug
+     */
     public function getId() {
         return $this->_id;
     }
@@ -78,8 +90,11 @@ class Usergroup {
         return $this->_is_admin;
     }
    
-    
-    //Gebruikersgroepsgegevens ophalen uit de database op basis van id
+    /**
+     * De gebruikersgroep uit de database ophalen op basis van het ID
+     * @param type $id: Het id van de gebruikersgroep die opgehaald moet worden
+     * @return boolean: `true` als de gerbuikersgroep bestaat en is opgehaald
+     */
     public function getById($id) {
         $stmp = $this->_db->prepare("SELECT * FROM `usergroups` WHERE `id` = ?;");
         $stmp->execute(array($id));

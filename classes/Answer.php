@@ -1,63 +1,84 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Class: Answer
+ * 
+ * Bevat alle informatie van een antwoord (op een poll)
+ *
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
 
-/**
- * Description of Answers
- *
- * @author Michael
- */
 class Answer {
-    private $_db;
+    private $_id;           //Uniek ID van het antwoord
+    private $_poll;         //ID van de poll waar dit antwoord toe behoort
+    private $_content;      //Inhoud van het antwoord
+    private $_scale = 6;    //Schaal voor weergave van poll-votebalk
+    private $_db;           //PDO database object voor communicatie met de database
     
-    public $id;
-    public $poll;
-    public $content;
-    
-    public $scale = 6;
-    public $totalVotes;
-    public $percent = 100;
-    public $width;
-    
+    /**
+     * Default constructor
+     * @param PDO $db: PDO database object voor communicatie met de database
+     */
     public function __construct(PDO $db) {
     $this->_db = $db;
     }
     
+    /**
+     * Getfuncties
+     */
+    public function getId() {
+        return $this->_id;
+    }
+    public function getPoll() {
+        return $this->_poll;
+    }
+    public function getContent() {
+        return $this->_content;
+    }
+    
+    /**
+     * Setfuncties
+     */
     public function setPoll($pollId) {
-        $this->poll = $pollId;
+        $this->_poll = $pollId;
     }
     
     public function setContent($content) {
-        $this->content = $content;
+        $this->_content = $content;
     }
     
-    public function setVotes($votes) {
-        $this->votes = $votes;
+    /**
+     * Een antwoord uit de database ophalen op basis van het ID
+     * @param type $id: Het ID van het antwoord dat opgehaald moet worden
+     * @return boolean: `true` als het antwoord bestaat en is opgehaald
+     */
+    public function getById($id) {
+        $this->_id = $id;
+        $stmp = $this->_db->prepare("SELECT * FROM `answers` WHERE `id`= ?;");
+        $stmp->execute(array($this->_id));
+        if ($stmp->rowCount() > '0') {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->_id = $row['id'];
+            $this->_poll = $row['poll'];
+            $this->_content = $row['content'];
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
-    public function getId() {
-        return $this->id;
-    }
-    
-    public function getPoll() {
-        return $this->poll;
-    }
-    
-    public function getContent() {
-        return $this->content;
-    }
-    
-    
+    /**
+     * Nieuw antwoord opslaan
+     * @return boolean: `true` wanneer het opslaan gelukt is
+     */
     public function save() {
         $qry = $this->_db->prepare("INSERT INTO answers(poll,content) VALUES(:poll,:content);");
         $data = array(
-            ':poll' => $this->poll,
-            ':content' => $this->content
+            ':poll' => $this->_poll,
+            ':content' => $this->_content
         );
-
         $qry->execute($data);
         if ($qry->rowCount() > '0') {
             return true;
@@ -68,18 +89,18 @@ class Answer {
     }
     
     
-    
+    /**
+     * Functies voor het opbouwen van het stembalkje dat bij de polls getoond wordt
+     */
     public function voteLinePercent($votes,$totalVotes) {
         $votes = isset($votes) ? $votes : 0;
         $totalVotes = isset($totalVotes) ? $totalVotes : 0;
         if ($totalVotes > 0) {
-        $percent = round(($votes/$totalVotes)*100);
+            $percent = round(($votes/$totalVotes)*100);
         }
-        else
-        {
+        else  {
             $percent = 0;
         }
-        
         return $percent;
     }
     
@@ -87,24 +108,12 @@ class Answer {
         $votes = isset($votes) ? $votes : 0;
         $totalVotes = isset($totalVotes) ? $totalVotes : 0;
         if ($totalVotes > 0) {
-        $width = round(($votes/$totalVotes)*100) * $this->scale;
+            $width = round(($votes/$totalVotes)*100) * $this->_scale;
         }
         else {
             $width = 1;
         }
-      
         return $width;
-    }
-    
-    public function getById($id) {
-        $this->id = $id;
-        $stmp = $this->_db->prepare("SELECT * FROM `answers` WHERE `id`= ?;");
-        $stmp->execute(array($this->id));
-        $row = $stmp->fetch(PDO::FETCH_ASSOC);
-        
-        $this->id = $row['id'];
-        $this->poll = $row['poll'];
-        $this->content = $row['content'];
     }
 }
 

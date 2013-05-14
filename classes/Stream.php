@@ -1,30 +1,41 @@
 <?php
 
-
 /**
- * Description of Stream
+ * Class: Stream
+ * 
+ * Bevat alle informatie van de stream
+ * Zorgt voor het uitlezen van informatie van de stream
  *
- * @author Kaj
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
+
 class Stream {
-    private $_url;
-    private $_currentlisteners; //Het aantal luisteraars
-    private $_peaklisteners; //Het record aantal luisteraars
-    private $_maxlisteners; //Het maximum aantal luisteraars
-    private $_uniquelisteners; //Het aantal unieke luisteraars (op basis van IP-adres)
-    private $_averagetime; //De gemiddelde luister-tijd
-    private $_servergenre; //Het genre, meegegeven door de server
-    private $_serverurl; //Server url (meestal link naar de broadcast software)
-    private $_servertitle; //Server titel (vaak de DJ naam)
-    private $_songtitle; //Songtitel
-    private $_streamstatus; //Streamstatus
-    private $_streamhits; //Streamhits
-    private $_bitrate; //Bitrate
+    private $_url;                  //URL naar de XML data informatieweergave van de stream
+    private $_currentlisteners;     //Het aantal luisteraars
+    private $_peaklisteners;        //Het record aantal luisteraars sinds dat de stream online is
+    private $_maxlisteners;         //Het maximum aantal luisteraars
+    private $_uniquelisteners;      //Het aantal unieke luisteraars (op basis van IP-adres)
+    private $_averagetime;          //De gemiddelde luister-tijd van de luisteraars
+    private $_servergenre;          //Het muziekgenre, meegegeven door de server
+    private $_serverurl;            //Server url (meestal link naar de broadcast software)
+    private $_servertitle;          //Server titel (Naam van de DJ)
+    private $_songtitle;            //Titel van het liedje dat wordt afgespeeld
+    private $_streamstatus;         //Streamstatus `1`:Online `0`:Offline
+    private $_streamhits;           //Streamhits
+    private $_bitrate;              //Bitrate van de muziek
     
+    /**
+     * Default constructor
+     * @param type $url: URL naar de XML data informatieweergave van de stream
+     */
     public function __construct($url) {
         $this->_url = $url;
     }
     
+    /**
+     * Getfuncties
+     */
     public function getCurrentListeners() {
         return $this->_currentlisteners;
     }
@@ -62,6 +73,10 @@ class Stream {
         return $this->_bitrate;
     }
     
+    /**
+     * Controleren of de stream online is
+     * @return boolean: `true` als de stream online is
+     */
     public function isOnline() {
         if ((@simplexml_load_file($this->_url) === false)) {
             return false;
@@ -71,6 +86,10 @@ class Stream {
         }
     }
     
+    /**
+     * De XML informatie van de stream uitlezen
+     * @return boolean: `true` als de server bereikbaar is en de XML data ingelezen is
+     */
     public function readAllXmlData() {
         if (!$this->isOnline()) {
             return false;
@@ -78,33 +97,31 @@ class Stream {
         else {
             $xml = simplexml_load_file($this->_url);
             
-//            Voorbeeld Xml data object dump:
-//                SimpleXMLElement Object ( 
-//                        [CURRENTLISTENERS] => 1 
-//                        [PEAKLISTENERS] => 1 
-//                        [MAXLISTENERS] => 32 
-//                        [UNIQUELISTENERS] => 1 
-//                        [AVERAGETIME] => 62 
-//                        [SERVERGENRE] => Hardstyle 
-//                        [SERVERURL] => http://www.virtualdj.com/ 
-//                        [SERVERTITLE] => DJKaj 
-//                        [SONGTITLE] => Crypsis - The Main MF 
-//                        [NEXTTITLE] => SimpleXMLElement Object ( ) 
-//                        [IRC] => DJKaj 
-//                        [ICQ] => DJKaj 
-//                        [AIM] => DJKaj 
-//                        [STREAMHITS] => 1 
-//                        [STREAMSTATUS] => 1 
-//                        [STREAMPATH] => /test.aac 
-//                        [BITRATE] => 160 
-//                        [CONTENT] => audio/mpeg 
-//                        [VERSION] => 2.0.0.29 (posix(linux x86)) 
-//                ) 
+            //            Voorbeeld Xml data object dump:
+            //                SimpleXMLElement Object ( 
+            //                        [CURRENTLISTENERS] => 1 
+            //                        [PEAKLISTENERS] => 1 
+            //                        [MAXLISTENERS] => 32 
+            //                        [UNIQUELISTENERS] => 1 
+            //                        [AVERAGETIME] => 62 
+            //                        [SERVERGENRE] => Hardstyle 
+            //                        [SERVERURL] => http://www.virtualdj.com/ 
+            //                        [SERVERTITLE] => DJKaj 
+            //                        [SONGTITLE] => Crypsis - The Main MF 
+            //                        [NEXTTITLE] => SimpleXMLElement Object ( ) 
+            //                        [IRC] => DJKaj 
+            //                        [ICQ] => DJKaj 
+            //                        [AIM] => DJKaj 
+            //                        [STREAMHITS] => 1 
+            //                        [STREAMSTATUS] => 1 
+            //                        [STREAMPATH] => /test.aac 
+            //                        [BITRATE] => 160 
+            //                        [CONTENT] => audio/mpeg 
+            //                        [VERSION] => 2.0.0.29 (posix(linux x86)) 
+            //                ) 
             
             
-            foreach($xml->children() as $child) {
-                //Loop door de xml tags
-
+            foreach($xml->children() as $child) { //Loop door de xml tags
                 switch($child->getName()) {
                     case 'CURRENTLISTENERS':
                         $this->_currentlisteners = $child;
@@ -144,10 +161,9 @@ class Stream {
                         break;
                 }
             }
+            return true;
         }
     }
-    
-    //put your code here
 }
 
 ?>

@@ -1,26 +1,35 @@
 <?php
 
 /**
- * Description of Member
+ * Class: Member
+ * 
+ * Bevat alle informatie van een gebruikersaccount.
+ * Het uitlezen en wegschrijven van de nodige gegevens gebeurt in deze klasse.
+ * Alle benodigde logica om de nodige informatie op te bouwen van wat een gebruiker kan wordt in deze klasse beschreven.
  *
- * @author Kaj
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
+
 class Member {
-    private $_id;
-    private $_username;
-    private $_email;
-    private $_password;
-    private $_avatar;
-    private $_signature;
-    private $_posts;
-    private $_registerdate;
-    private $_lastlogin;
-    private $_lastip;
-    private $_usergroup;
-    private $_verificationcode;
+    private $_id;                   //Uniek ID
+    private $_username;             //Gebruikersnaam
+    private $_email;                //Emailadres
+    private $_password;             //MD5 geëncrypteerd passwoord
+    private $_avatar;               //URL naar de avatar
+    private $_signature;            //Signature
+    private $_posts;                //Aantal posts
+    private $_registerdate;         //Datum van registratie
+    private $_lastlogin;            //Datum van laast ingelogd
+    private $_lastip;               //Laatst gebruikte IP adres
+    private $_usergroup;            //ID van de gebruikersgroep waartoe de gebruiker behoord
+    private $_verificationcode;     //Unieke verificatie code voor activatie account
+    private $_db;                   //PDO Database object
     
-    private $_db;
-    
+    /**
+     * Default constructor
+     * @param PDO $db: PDO object dat gebruikt wordt om te verbinden op database
+     */
     public function __construct(PDO $db) {
         $this->_db = $db;
         $this->_avatar = "";
@@ -29,44 +38,30 @@ class Member {
         $this->_usergroup = "1";
     }
     
+    /**
+     * Getfuncties
+     * @return type: Geeft opgevraagde informatie terug
+     */
     public function getId() {
         return $this->_id;
     }
     public function getUsername() {
         return $this->_username;
     }
-    public function setUsername($username) {
-        $this->_username = $username;
-    }
     public function getEmail() {
         return $this->_email;
-    }
-    public function setEmail($email) {
-        $this->_email = $email;
     }
     public function getPassword() {
         return $this->_password;
     }
-    public function setPassword($password) {
-        $this->_password = $password;
-    }
     public function getAvatar() {
         return $this->_avatar;
-    }
-    public function setAvatar($avatar) {
-        $this->_avatar = $avatar;
     }
     public function getSignature() {
         return $this->_signature;
     }
-    public function setSignature($signature) {
-        $this->_signature = $signature;
-    }
     public function getPosts() {
         return $this->_posts;
-    }
-    public function setPosts($posts) {
-        $this->_posts = $posts;
     }
     public function getRegisterdate() {
         return $this->_registerdate;
@@ -80,16 +75,33 @@ class Member {
     public function getUsergroup() {
         return $this->_usergroup;
     }
-    public function setUsergroup($usergroup) {
-        $this->_usergroup = $usergroup;
-    }
-    public function isGuest($isguest) {
-        if ($isguest) {
-            $this->_usergroup = "5";
-        }
-    }
     public function getVerificationcode() {
         return $this->_verificationcode;
+    }
+    
+    /**
+     * Setfuncties
+     */
+    public function setUsername($username) {
+        $this->_username = $username;
+    }
+    public function setEmail($email) {
+        $this->_email = $email;
+    }
+    public function setPassword($password) {
+        $this->_password = $password;
+    }
+    public function setAvatar($avatar) {
+        $this->_avatar = $avatar;
+    }
+    public function setSignature($signature) {
+        $this->_signature = $signature;
+    }
+    public function setPosts($posts) {
+        $this->_posts = $posts;
+    }
+    public function setUsergroup($usergroup) {
+        $this->_usergroup = $usergroup;
     }
     public function setVerificationcode($verificationcode) {
         $this->_verificationcode = $verificationcode;
@@ -99,34 +111,17 @@ class Member {
         $usergroup->getById($this->_usergroup);
         return $usergroup;
     }
-    
-    //Controle of deze (nieuwe) gebruiker aangemaakt mag worden
-    public function available() {
-        
-        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username` = ? OR email = ?;");
-        $qry->execute(array($this->_username,$this->_email));
-  
-        
-        if ($qry->rowCount() > "0") {
-            return false;
-        }
-        else {
-            return true;
+    public function isGuest($isguest) {
+        if ($isguest) {
+            $this->_usergroup = "5";
         }
     }
     
-    public function incPosts() {
-        $stmp = $this->_db->prepare("UPDATE users SET `posts` = `posts` + 1 WHERE id=?");
-        $stmp->execute(array($this->_id));
-        if ($stmp->rowCount() > '0') {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    //Gebruikersgegevens ophalen uit de database op basis van id
+    /**
+     * Gebruikersgegevens van het account ophalen
+     * @param type $id: Het id van het gebruikersaccount dat opgehaald moet worden
+     * @return boolean: `true` wanneer er een account met opgegeven ID bestaat
+     */
     public function getById($id) {
         $stmp = $this->_db->prepare("SELECT * FROM `users` WHERE `id` = ?;");
         $stmp->execute(array($id));
@@ -151,22 +146,10 @@ class Member {
         }
     }
     
-    //Controleer of deze gebruiker zijn gegevens juist zijn
-    public function verify() {
-        $stmp = $this->_db->prepare("SELECT `id` FROM `users` WHERE `username`= ? AND `password` = ?;");
-        $stmp->execute(array($this->_username,$this->_password));
-        
-        if ($stmp->rowCount() == "1") {
-            $row = $stmp->fetch(PDO::FETCH_ASSOC);
-            $this->_id = $row['id'];
-            return $this->_id;
-        }
-        else {
-            return false;
-        }
-    }
-    
-    //Gebruiker wegschrijven naar de database
+    /**
+     * Gebruiker opslaan in de database
+     * @return boolean: `true` als het opslaan is gelukt
+     */
     public function save() {
         if (!$this->available()) {
             return false;
@@ -193,10 +176,47 @@ class Member {
                 return false;
             }
         }
+    }    
+    
+    /**
+     * Controleren of de opgegeven gegevens voor deze gebruiker juist zijn
+     * @return boolean: `true` als de opgegeven gegevens correct zijn
+     */
+    public function verify() {
+        $stmp = $this->_db->prepare("SELECT `id` FROM `users` WHERE `username`= ? AND `password` = ?;");
+        $stmp->execute(array($this->_username,$this->_password));
+        
+        if ($stmp->rowCount() == "1") {
+            $row = $stmp->fetch(PDO::FETCH_ASSOC);
+            $this->_id = $row['id'];
+            return $this->_id;
+        }
+        else {
+            return false;
+        }
     }
     
+    /**
+     * Controleren of de opgegeven gegevens nog beschikbaar zijn om een nieuw account mee aan te maken
+     * @return boolean: `true` als de gegevens nog niet in gebruik zijn door een ander account
+     */
+    public function available() {
+        $qry = $this->_db->prepare("SELECT * FROM `users` WHERE `username` = ? OR `email` = ?;");
+        $qry->execute(array($this->_username,$this->_email));
+        if ($qry->rowCount() > "0") {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    
+    /**
+     * Het gebruikersaccount activeren
+     * @return boolean: `true` als het activeren is gelukt
+     */
     public function activate() {
-        $qry = $this->_db->prepare("UPDATE users SET usergroup=? WHERE id=?");
+        $qry = $this->_db->prepare("UPDATE `users` SET `usergroup`=? WHERE `id`=?");
         $qry->execute(array("2",$this->_id));
         if ($qry->rowCount() > '0') {
             return true;
@@ -205,8 +225,28 @@ class Member {
             return false;
         }
     }
+    
+    /**
+     * Het aantal posts van deze gebruiker incrementeren
+     * @return boolean: `true` als postcount incrementeren gelukt is
+     */
+    public function incPosts() {
+        $stmp = $this->_db->prepare("UPDATE `users` SET `posts` = `posts` + 1 WHERE `id` = ?");
+        $stmp->execute(array($this->_id));
+        if ($stmp->rowCount() > '0') {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /**
+     * De avatar van de gebruiker aanpassen
+     * @return boolean: `true` als het aanpassen van de avatar is gelukt
+     */
     public function updateAvatar() {
-        $qry = $this->_db->prepare("UPDATE users SET avatar=? WHERE id=?");
+        $qry = $this->_db->prepare("UPDATE `users` SET `avatar`=? WHERE `id`=?");
         $qry->execute(array($this->_avatar,$this->_id));
         if ($qry->rowCount() > '0') {
             return true;
@@ -215,8 +255,13 @@ class Member {
             return false;
         }
     }
+    
+    /**
+     * De signature van de gebruiker aanpassen
+     * @return boolean: `true` als het aanpassen van de signature gelukt is
+     */
     public function updateSignature() {
-        $qry = $this->_db->prepare("UPDATE users SET signature=? WHERE id=?");
+        $qry = $this->_db->prepare("UPDATE `users` SET `signature`=? WHERE `id`=?");
         $qry->execute(array($this->_signature,$this->_id));
         if ($qry->rowCount() > '0') {
             return true;
@@ -226,9 +271,12 @@ class Member {
         }
     }
     
-    
+    /**
+     * De datum wanneer de gebruiker het laatst ingelogd is updaten naar huidig tijdstip
+     * @return boolean: `true` als het updaten gelukt is
+     */
     public function setLastloginNow() {
-        $qry = $this->_db->prepare("UPDATE users SET lastlogin=NOW() WHERE id=?");
+        $qry = $this->_db->prepare("UPDATE `users` SET `lastlogin`=NOW() WHERE `id`=?");
         $qry->execute(array($this->_id));
         if ($qry->rowCount() > '0') {
             return true;
@@ -238,10 +286,13 @@ class Member {
         }
     }
     
-    
-    
+    /**
+     * Het IP adres vanaf waar het account het laatste is aangemeld updaten
+     * @param type $ip: Het IP adres dat opgeslagen moet worden
+     * @return boolean: `true` als het opslaan gelukt is
+     */
     public function setLastIp($ip) {
-        $qry = $this->_db->prepare("UPDATE users SET lastip=? WHERE id=?");
+        $qry = $this->_db->prepare("UPDATE `users` SET `lastip`=? WHERE `id`=?");
         $qry->execute(array($ip,$this->_id));
         if ($qry->rowCount() > '0') {
             return true;

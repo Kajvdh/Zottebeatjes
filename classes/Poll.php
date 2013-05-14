@@ -1,68 +1,53 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Class: WebPoll
+ * 
+ * Bevat alle informatie van een poll
+ *
+ * @author Kaj Van der Hallen
+ * @author Michael Deboeure
  */
 
-/**
- * Description of Poll
- *
- * @author Michael
- */
 class Poll {
-    private $_db;
-    private $_answers;
-      
-    public $id;
-    public $question;
+    private $_id;            //Uniek ID van de poll
+    private $_question;      //Vraag van de poll
+    private $_answers;      //Array van de objecten van alle mogelijke antwoorden
+    private $_db;           //PDO database object voor communicatie met de database
     
+    /**
+     * Default constructor
+     * @param PDO $db: PDO database object voor communicatie met de database
+     */
     public function __construct(PDO $db) {
     $this->_db = $db;
     $this->_answers = array();
     }
     
-     public function setQuestion($question) {
-        $this->question = $question;
-    }
-    
+    /**
+     * Getfuncties
+     */
     public function getId() {
-        return $this->id;
+        return $this->_id;
     }
-    
     public function getQuestion() {
-        return $this->question;
+        return $this->_question;
     }
     
-    
-    public function available() { //Niet zeker of dit nodig is
-        return true;
+    /**
+     * Setfuncties
+     */
+     public function setQuestion($question) {
+        $this->_question = $question;
     }
     
-    public function save() {
-        if (!$this->available()) {
-            return false;
-        }
-        else {
-            $qry = $this->_db->prepare("INSERT INTO polls(question) VALUES(:question);");
-            $data = array(
-                ':question' => $this->question
-            );
-            
-            $qry->execute($data);
-            if ($qry->rowCount() > '0') {
-                $this->id = $this->_db->lastInsertId('id');
-                return true;
-            }
-            else {
-                return false;
-            }
-        }   
-    }
-     
+    /**
+     * Alle antwoorden die tot deze poll behoren ophalen
+     * @return type: Array van alle answer objecten die tot deze poll behoren
+     */
     public function getAllAnswers() {
-        $stmt = $this->_db->prepare("SELECT `id`FROM `answers` WHERE `poll`= ? ORDER BY `id` ASC;");
-        $stmt->execute(array($this->id));
+        $stmt = $this->_db->prepare("SELECT `id` FROM `answers` WHERE `poll`= ? ORDER BY `id` ASC;");
+        $stmt->execute(array($this->_id));
         
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $this->categoryIds = array();
@@ -76,21 +61,43 @@ class Poll {
         return $this->_answers;
     }
     
-    
+    /**
+     * Een poll uit de database ophalen op basis van het ID
+     * @param type $id: Het ID van de poll die opgehaald moet worden
+     * @return boolean: `true` als de poll bestaat en is opgehaald
+     */
     public function getById($id) {
-        $this->id = $id;
+        $this->_id = $id;
         $stmp = $this->_db->prepare("SELECT * FROM `polls` WHERE `id`= ?;");
-        $stmp->execute(array($this->id));
-        
+        $stmp->execute(array($this->_id));
         if ($stmp->rowCount() == "1") {
             $row = $stmp->fetch(PDO::FETCH_ASSOC);
-            $this->id = $row['id'];
-            $this->question = $row['question'];
+            $this->_id = $row['id'];
+            $this->_question = $row['question'];
             return true;
         }
         else {
             return false;
         }
+    }
+    
+    /**
+     * Nieuwe poll opslaan
+     * @return boolean: `true` wanneer het opslaan gelukt is
+     */
+    public function save() {
+        $qry = $this->_db->prepare("INSERT INTO polls(question) VALUES(:question);");
+        $data = array(
+            ':question' => $this->_question
+        );
+        $qry->execute($data);
+        if ($qry->rowCount() > '0') {
+            $this->_id = $this->_db->lastInsertId('id');
+            return true;
+        }
+        else {
+            return false;
+        } 
     }
 }
 
